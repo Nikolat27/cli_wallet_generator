@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/rand"
 	"crypto/sha256"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -13,7 +14,7 @@ const (
 	entropyBytes int = 16
 )
 
-func GenerateSeeds() ([]string, error) {
+func NewSeeds() ([]string, error) {
 	entropy, err := generateEntropy()
 	if err != nil {
 		return nil, err
@@ -117,4 +118,16 @@ func readWordsFile() ([][]byte, error) {
 
 	separatedWords := bytes.Split(words, []byte("\n"))
 	return separatedWords, nil
+}
+
+func addPassphrase(words []string) error {
+	var userPassphrase string
+	fmt.Print("Enter your passphrase (25th word e.g.: apple, sam, trump and etc...): ")
+	_, err := fmt.Scan(&userPassphrase)
+	if err != nil {
+		return err
+	}
+
+	words = append(words, userPassphrase)
+	return nil
 }

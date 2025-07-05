@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	seeds, err := bip39.GenerateSeeds()
+	seeds, err := bip39.NewSeeds()
 	if err != nil {
 		panic(err)
 	}
