@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"cli_wallet_generator/bip39"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("hello world")
+	seeds, err := bip39.GenerateSeeds()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(seeds)
 }
