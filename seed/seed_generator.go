@@ -1,13 +1,16 @@
 package seed
 
 import (
+	"crypto/hmac"
 	"crypto/pbkdf2"
 	"crypto/sha512"
 	"fmt"
 )
 
 type Seed struct {
-	Bytes []byte
+	Bytes      []byte
+	PrivateKey []byte
+	ChainKey   []byte
 }
 
 func NewSeed(mnemonic string) (*Seed, error) {
@@ -48,4 +51,16 @@ func getPassphrase() (string, error) {
 	}
 
 	return userPassphrase, nil
+}
+
+func (s *Seed) DeriveMasterKey() {
+	mac := hmac.New(sha512.New, []byte("Bitcoin seed"))
+	mac.Write(s.Bytes)
+
+	I := mac.Sum(nil)
+	privateKey := I[:32]
+	chainKey := I[32:]
+
+	s.PrivateKey = privateKey
+	s.ChainKey = chainKey
 }

@@ -17,5 +17,12 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(string(newSeed.Bytes))
+	newSeed.DeriveMasterKey()
+	
+	addr, err := newSeed.PrivateKeyToEthereumAddress()
+	if err != nil {
+		panic(err)
+	}
+	
+	fmt.Println(addr)
 }
