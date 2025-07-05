@@ -4,17 +4,21 @@ import (
 	"bytes"
 	"crypto/rand"
 	"crypto/sha256"
-	"fmt"
 	"io"
 	"log/slog"
 	"os"
+	"strings"
 )
 
 const (
 	entropyBytes int = 16
 )
 
-func NewSeeds() ([]string, error) {
+type Mnemonic struct {
+	words []string
+}
+
+func NewMnemonic() (*Mnemonic, error) {
 	entropy, err := generateEntropy()
 	if err != nil {
 		return nil, err
@@ -26,9 +30,13 @@ func NewSeeds() ([]string, error) {
 
 	ints := bitsToInts(chunks)
 
-	words, err := getWords(ints)
+	w, err := getWords(ints)
 	if err != nil {
 		return nil, err
+	}
+
+	words := &Mnemonic{
+		words: w,
 	}
 
 	return words, nil
@@ -120,14 +128,6 @@ func readWordsFile() ([][]byte, error) {
 	return separatedWords, nil
 }
 
-func addPassphrase(words []string) error {
-	var userPassphrase string
-	fmt.Print("Enter your passphrase (25th word e.g.: apple, sam, trump and etc...): ")
-	_, err := fmt.Scan(&userPassphrase)
-	if err != nil {
-		return err
-	}
-
-	words = append(words, userPassphrase)
-	return nil
+func (m *Mnemonic) String() string {
+	return strings.Join(m.words, " ")
 }
