@@ -1,6 +1,7 @@
 package seed
 
 import (
+	"cli_wallet_generator/currency"
 	"crypto/hmac"
 	"crypto/pbkdf2"
 	"crypto/sha512"
@@ -11,11 +12,13 @@ type Seed struct {
 	Bytes      []byte
 	PrivateKey []byte
 	ChainKey   []byte
+	Currency   address.Currency
 }
 
 const (
 	pbkdf2Iterations = 2048
 	pbkdf2KeyLen     = 64
+	bitcoinSeed      = "Bitcoin seed"
 )
 
 func NewSeed(mnemonic string) (*Seed, error) {
@@ -58,8 +61,8 @@ func getPassphrase() (string, error) {
 	return userPassphrase, nil
 }
 
-func (s *Seed) DeriveMasterKey() {
-	mac := hmac.New(sha512.New, []byte("Bitcoin seed"))
+func (s *Seed) GetMasterKey() {
+	mac := hmac.New(sha512.New, []byte(bitcoinSeed))
 	mac.Write(s.Bytes)
 
 	I := mac.Sum(nil)
