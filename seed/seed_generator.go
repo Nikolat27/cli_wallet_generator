@@ -13,13 +13,18 @@ type Seed struct {
 	ChainKey   []byte
 }
 
+const (
+	pbkdf2Iterations = 2048
+	pbkdf2KeyLen     = 64
+)
+
 func NewSeed(mnemonic string) (*Seed, error) {
 	salt, err := getSalt()
 	if err != nil {
 		return nil, err
 	}
 
-	s, err := pbkdf2.Key(sha512.New, mnemonic, []byte(salt), 2048, 64)
+	s, err := pbkdf2.Key(sha512.New, mnemonic, []byte(salt), pbkdf2Iterations, pbkdf2KeyLen)
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +63,7 @@ func (s *Seed) DeriveMasterKey() {
 	mac.Write(s.Bytes)
 
 	I := mac.Sum(nil)
-	privateKey := I[:32]
-	chainKey := I[32:]
 
-	s.PrivateKey = privateKey
-	s.ChainKey = chainKey
+	s.PrivateKey = I[:32]
+	s.ChainKey = I[32:]
 }
