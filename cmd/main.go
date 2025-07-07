@@ -17,12 +17,12 @@ func main() {
 		panic(err)
 	}
 
-	newSeed.DeriveMasterKey()
-	
-	addr, err := newSeed.PrivateKeyToEthereumAddress()
+	newSeed.GetMasterKey()
+
+	err = newSeed.Currency.Ethereum.PrivateKeyToEthereumAddress(newSeed.PrivateKey)
 	if err != nil {
 		panic(err)
 	}
-	
-	fmt.Println(addr)
+
+	fmt.Println(newSeed.Currency.Bitcoin.Address)
 }
