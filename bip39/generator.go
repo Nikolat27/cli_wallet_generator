@@ -29,18 +29,18 @@ func NewMnemonic() (*Mnemonic, error) {
 
 	chunks := splitBits(checksumEntropy)
 
-	ints := bitsToInts(chunks)
+	wordsIndex := bitsToWordsIndex(chunks)
 
-	w, err := getWords(ints)
+	words, err := getWords(wordsIndex)
 	if err != nil {
 		return nil, err
 	}
 
-	words := &Mnemonic{
-		words: w,
+	w := &Mnemonic{
+		words: words,
 	}
 
-	return words, nil
+	return w, nil
 }
 
 func generateEntropy() ([]byte, error) {
@@ -71,37 +71,39 @@ func appendChecksum(entropy []byte) []bool {
 
 func splitBits(bits []bool) [][]bool {
 	var chunks [][]bool
+
 	for i := 0; i < len(bits); i += 11 {
 		chunks = append(chunks, bits[i:i+11])
 	}
 	return chunks
 }
 
-func bitsToInts(chunks [][]bool) []int {
-	var ints []int
+func bitsToWordsIndex(chunks [][]bool) []int {
+	var wordsIndex []int
 	for _, bitSlice := range chunks {
-		val := 0
+		index := 0
 		for _, b := range bitSlice {
-			val = val << 1
+			index = index << 1
 			if b {
-				val += 1
+				index += 1
 			}
 		}
-		ints = append(ints, val)
+		wordsIndex = append(wordsIndex, index)
 	}
-	return ints
+	return wordsIndex
 }
 
-func getWords(ints []int) ([]string, error) {
-	separatedWords, err := readWordsFile()
+func getWords(wordsIndex []int) ([]string, error) {
+	wordsList, err := readWordsFile()
 	if err != nil {
 		return nil, err
 	}
 
-	chosenWords := make([]string, 0, len(ints))
+	chosenWords := make([]string, 0, len(wordsIndex))
 
-	for _, val := range ints {
-		chosenWords = append(chosenWords, string(separatedWords[val]))
+	for _, index := range wordsIndex {
+		word := string(wordsList[index])
+		chosenWords = append(chosenWords, word)
 	}
 
 	return chosenWords, nil
@@ -114,8 +116,7 @@ func readWordsFile() ([][]byte, error) {
 	}
 
 	defer func() {
-		err := file.Close()
-		if err != nil {
+		if err := file.Close(); err != nil {
 			slog.Error("closing file", "error", err)
 		}
 	}()
@@ -125,8 +126,8 @@ func readWordsFile() ([][]byte, error) {
 		return nil, err
 	}
 
-	separatedWords := bytes.Split(words, []byte("\n"))
-	return separatedWords, nil
+	wordsList := bytes.Split(words, []byte("\n"))
+	return wordsList, nil
 }
 
 func (m *Mnemonic) String() string {
