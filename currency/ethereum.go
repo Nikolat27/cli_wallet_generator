@@ -10,7 +10,7 @@ type Ethereum struct {
 	Address string
 }
 
-func (e *Ethereum) PrivateKeyToEthereumAddress(privKey []byte) error {
+func (e *Ethereum) GetAddress(privKey []byte) error {
 	privateKey, err := crypto.ToECDSA(privKey)
 	if err != nil {
 		return err

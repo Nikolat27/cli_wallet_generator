@@ -17,10 +17,11 @@ func main() {
 		panic(err)
 	}
 
-	newSeed.GetMasterKey()
+	if err = newSeed.GenerateMasterKey(); err != nil {
+		panic(err)
+	}
 
-	err = newSeed.Currency.Ethereum.PrivateKeyToEthereumAddress(newSeed.PrivateKey)
-	if err != nil {
+	if err = newSeed.Currency.Ethereum.GetAddress(newSeed.PrivateKey); err != nil {
 		panic(err)
 	}
 
