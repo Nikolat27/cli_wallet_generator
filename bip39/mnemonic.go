@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	entropyBytes int    = 16
-	whitespace   string = " "
+	EntropyBytes int    = 16
+	Whitespace   string = " "
 )
 
 type Mnemonic struct {
@@ -44,9 +44,8 @@ func NewMnemonic() (*Mnemonic, error) {
 }
 
 func generateEntropy() ([]byte, error) {
-	entropy := make([]byte, entropyBytes)
-	_, err := rand.Read(entropy)
-	if err != nil {
+	entropy := make([]byte, EntropyBytes)
+	if _, err := rand.Read(entropy); err != nil {
 		return nil, err
 	}
 
@@ -131,5 +130,5 @@ func readWordsFile() ([][]byte, error) {
 }
 
 func (m *Mnemonic) String() string {
-	return strings.Join(m.words, whitespace)
+	return strings.Join(m.words, Whitespace)
 }

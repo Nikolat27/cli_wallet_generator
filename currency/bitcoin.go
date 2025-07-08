@@ -1,9 +1,9 @@
 package address
 
 type Bitcoin struct {
-	Address string
+	PrivateKey []byte
 }
 
-func (b *Bitcoin) GetAddress(privKey []byte) error {
+func (b *Bitcoin) GetAddress() error {
 	return nil
 }

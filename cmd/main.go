@@ -2,8 +2,7 @@ package main
 
 import (
 	"cli_wallet_generator/bip39"
-	"cli_wallet_generator/seed"
-	"fmt"
+	address "cli_wallet_generator/currency"
 )
 
 func main() {
@@ -12,18 +11,14 @@ func main() {
 		panic(err)
 	}
 
-	newSeed, err := seed.NewSeed(mnemonic.String())
+	seed, err := bip39.NewSeed(mnemonic.String())
 	if err != nil {
 		panic(err)
 	}
 
-	if err = newSeed.GenerateMasterKey(); err != nil {
+	if err = seed.GenerateMasterKey(); err != nil {
 		panic(err)
 	}
 
-	if err = newSeed.Currency.Ethereum.GetAddress(newSeed.PrivateKey); err != nil {
-		panic(err)
-	}
-
-	fmt.Println(newSeed.Currency.Bitcoin.Address)
+	_ = address.InitCurrencies(seed.PrivateKey)
 }

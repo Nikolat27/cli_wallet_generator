@@ -1,4 +1,4 @@
-package seed
+package bip39
 
 import (
 	"cli_wallet_generator/currency"
@@ -56,8 +56,8 @@ func getSalt() (string, error) {
 func getPassphrase() (string, error) {
 	var userPassphrase string
 	fmt.Print("Enter your passphrase (e.g.: apple, sam, trump and etc...): ")
-	_, err := fmt.Scan(&userPassphrase)
-	if err != nil {
+
+	if _, err := fmt.Scan(&userPassphrase); err != nil {
 		return "", err
 	}
 

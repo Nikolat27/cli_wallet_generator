@@ -7,13 +7,13 @@ import (
 )
 
 type Ethereum struct {
-	Address string
+	PrivateKey []byte
 }
 
-func (e *Ethereum) GetAddress(privKey []byte) error {
-	privateKey, err := crypto.ToECDSA(privKey)
+func (e *Ethereum) GetAddress() (string, error) {
+	privateKey, err := crypto.ToECDSA(e.PrivateKey)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	publicKey := privateKey.Public().(*ecdsa.PublicKey)
@@ -26,6 +26,5 @@ func (e *Ethereum) GetAddress(privKey []byte) error {
 
 	finalAddress := "0x" + fmt.Sprintf("%x", Address)
 
-	e.Address = finalAddress
-	return nil
+	return finalAddress, nil
 }
