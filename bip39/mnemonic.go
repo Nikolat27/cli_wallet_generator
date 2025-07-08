@@ -19,7 +19,7 @@ type Mnemonic struct {
 	words []string
 }
 
-func NewMnemonic() (*Mnemonic, error) {
+func newMnemonic() (*Mnemonic, error) {
 	entropy, err := generateEntropy()
 	if err != nil {
 		return nil, err

@@ -1,25 +1,29 @@
 package main
 
 import (
-	"cli_wallet_generator/bip39"
-	address "cli_wallet_generator/currency"
+	"bufio"
+	"cli_wallet_generator/cli"
+	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
-	mnemonic, err := bip39.NewMnemonic()
-	if err != nil {
-		panic(err)
-	}
+	fmt.Println("Enter your commands: ")
 
-	seed, err := bip39.NewSeed(mnemonic.String())
-	if err != nil {
-		panic(err)
-	}
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
+		fmt.Print("> ")
 
-	if err = seed.GenerateMasterKey(); err != nil {
-		panic(err)
-	}
+		if !scanner.Scan() {
+			panic("Scan() is false")
+		}
 
-	_ = address.InitCurrencies(seed.PrivateKey)
+		input := strings.TrimSpace(scanner.Text())
+
+		inputs := strings.Split(input, " ")
+		if err := cli.HandleUserCommand(inputs); err != nil {
+			fmt.Println(err)
+		}
+	}
 }
-

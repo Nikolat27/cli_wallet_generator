@@ -1,19 +1,19 @@
 package bip39
 
 import (
-	"cli_wallet_generator/currency"
 	"crypto/hmac"
 	"crypto/pbkdf2"
 	"crypto/sha512"
 	"errors"
 	"fmt"
+	"github.com/atotto/clipboard"
+	"github.com/zalando/go-keyring"
 )
 
 type Seed struct {
-	Bytes      []byte
+	RawSeed    []byte
 	PrivateKey []byte
 	ChainKey   []byte
-	Currency   address.Currency
 }
 
 const (
@@ -22,8 +22,35 @@ const (
 	PrivateKeyLength = 32
 	ChainCodeLength  = 32
 	bitcoinSeed      = "Bitcoin seed"
+	ServiceName      = "cli-wallet-generator"
+	KeyringUsername  = "832123"
+	SecretKey        = "bmqo1k489sklz!r2"
 )
 
+func CreateSeedAndMasterKey(walletName string) error {
+	mnemonic, err := newMnemonic()
+	if err != nil {
+		return err
+	}
+
+	seed, err := NewSeed(mnemonic.String())
+	if err != nil {
+		return err
+	}
+
+	if err := seed.generateMasterKey(); err != nil {
+		return err
+	}
+
+	if _, err := seed.storeWalletDataInJson(walletName); err != nil {
+		return err
+	}
+
+	fmt.Printf("\n12 phrase words Copied to your Clipboard (Don`t ever expose it)\n")
+	return clipboard.WriteAll(mnemonic.String())
+}
+
+// NewSeed => Convert 12 words to 64-byte Seed using pbkdf2
 func NewSeed(mnemonic string) (*Seed, error) {
 	salt, err := getSalt()
 	if err != nil {
@@ -36,7 +63,7 @@ func NewSeed(mnemonic string) (*Seed, error) {
 	}
 
 	seed := &Seed{
-		Bytes: s,
+		RawSeed: s,
 	}
 
 	return seed, nil
@@ -45,7 +72,7 @@ func NewSeed(mnemonic string) (*Seed, error) {
 func getSalt() (string, error) {
 	passphrase, err := getPassphrase()
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	salt := "mnemonic" + passphrase
@@ -64,23 +91,27 @@ func getPassphrase() (string, error) {
 	return userPassphrase, nil
 }
 
-func (s *Seed) GenerateMasterKey() error {
-	if len(s.Bytes) == 0 {
-		return errors.New("seed bytes are empty")
+func (s *Seed) generateMasterKey() error {
+	if len(s.RawSeed) == 0 {
+		return errors.New("seed RawSeed are empty")
 	}
 
 	hash := hmac.New(sha512.New, []byte(bitcoinSeed))
-	if _, err := hash.Write(s.Bytes); err != nil {
+	if _, err := hash.Write(s.RawSeed); err != nil {
 		return fmt.Errorf("HMAC writing error: %s", err)
 	}
 
-	intermediateKey := hash.Sum(nil)
-	if len(intermediateKey) != PrivateKeyLength+ChainCodeLength {
-		return fmt.Errorf("invalid 'intermediateKey' length: %d", len(intermediateKey))
+	I := hash.Sum(nil)
+	if len(I) != PrivateKeyLength+ChainCodeLength {
+		return fmt.Errorf("invalid 'I' length: %d", len(I))
 	}
 
-	s.PrivateKey = intermediateKey[:32]
-	s.ChainKey = intermediateKey[32:]
+	s.PrivateKey = I[:PrivateKeyLength]
+	s.ChainKey = I[PrivateKeyLength:]
 
 	return nil
+}
+
+func (s *Seed) storeSeedInKeyring(user string) error {
+	return keyring.Set(ServiceName, user, string(s.RawSeed))
 }
