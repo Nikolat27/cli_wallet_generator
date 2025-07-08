@@ -22,3 +22,4 @@ func main() {
 
 	_ = address.InitCurrencies(seed.PrivateKey)
 }
+
