@@ -1,0 +1,8 @@
+{
+    "wallets": [
+        {
+            "name": "wl1",
+            "address": "testAddr"
+        }
+    ]
+}
