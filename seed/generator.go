@@ -5,6 +5,7 @@ import (
 	"crypto/hmac"
 	"crypto/pbkdf2"
 	"crypto/sha512"
+	"errors"
 	"fmt"
 )
 
@@ -16,8 +17,10 @@ type Seed struct {
 }
 
 const (
-	pbkdf2Iterations = 2048
-	pbkdf2KeyLen     = 64
+	Pbkdf2Iterations = 2048
+	Pbkdf2KeyLen     = 64
+	PrivateKeyLength = 32
+	ChainCodeLength  = 32
 	bitcoinSeed      = "Bitcoin seed"
 )
 
@@ -27,7 +30,7 @@ func NewSeed(mnemonic string) (*Seed, error) {
 		return nil, err
 	}
 
-	s, err := pbkdf2.Key(sha512.New, mnemonic, []byte(salt), pbkdf2Iterations, pbkdf2KeyLen)
+	s, err := pbkdf2.Key(sha512.New, mnemonic, []byte(salt), Pbkdf2Iterations, Pbkdf2KeyLen)
 	if err != nil {
 		return nil, err
 	}
@@ -61,12 +64,23 @@ func getPassphrase() (string, error) {
 	return userPassphrase, nil
 }
 
-func (s *Seed) GetMasterKey() {
-	mac := hmac.New(sha512.New, []byte(bitcoinSeed))
-	mac.Write(s.Bytes)
+func (s *Seed) GenerateMasterKey() error {
+	if len(s.Bytes) == 0 {
+		return errors.New("seed bytes are empty")
+	}
 
-	I := mac.Sum(nil)
+	hash := hmac.New(sha512.New, []byte(bitcoinSeed))
+	if _, err := hash.Write(s.Bytes); err != nil {
+		return fmt.Errorf("HMAC writing error: %s", err)
+	}
 
-	s.PrivateKey = I[:32]
-	s.ChainKey = I[32:]
+	intermediateKey := hash.Sum(nil)
+	if len(intermediateKey) != PrivateKeyLength+ChainCodeLength {
+		return fmt.Errorf("invalid 'intermediateKey' length: %d", len(intermediateKey))
+	}
+
+	s.PrivateKey = intermediateKey[:32]
+	s.ChainKey = intermediateKey[32:]
+
+	return nil
 }
