@@ -1,7 +1,7 @@
-package address
+package currency
 
 type Bitcoin struct {
-	PrivateKey []byte
+	Mnemonic string
 }
 
 func (b *Bitcoin) GetAddress() error {

@@ -1,4 +1,4 @@
-package address
+package currency
 
 import (
 	"cli_wallet_generator/bip39"
@@ -10,7 +10,6 @@ import (
 
 type Ethereum struct {
 	Mnemonic   string
-	Passphrase string // optional
 }
 
 const (
