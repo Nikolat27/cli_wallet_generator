@@ -1,31 +1,9 @@
 package address
 
-import (
-	"crypto/ecdsa"
-	"fmt"
-	"github.com/ethereum/go-ethereum/crypto"
-)
-
 type Bitcoin struct {
 	Address string
 }
 
-func (b *Bitcoin) PrivateKeyToBitcoinAddress(privKey []byte) error {
-	privateKey, err := crypto.ToECDSA(privKey)
-	if err != nil {
-		return err
-	}
-
-	publicKey := privateKey.Public().(*ecdsa.PublicKey)
-	pubBytes := crypto.FromECDSAPub(publicKey)
-
-	pubBytes = pubBytes[1:]
-	hash := crypto.Keccak256(pubBytes)
-
-	Address := hash[12:]
-
-	finalAddress := "0x" + fmt.Sprintf("%x", Address)
-
-	b.Address = finalAddress
+func (b *Bitcoin) GetAddress(privKey []byte) error {
 	return nil
 }
