@@ -17,7 +17,7 @@ type Wallet struct {
 
 type Address struct {
 	Coin      string    `json:"coin"`
-	Address   []byte    `json:"address"`
+	Address   string    `json:"address"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
