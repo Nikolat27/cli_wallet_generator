@@ -8,12 +8,14 @@ import (
 )
 
 const (
-	jsonFilePath = "wallets.json"
+	JsonFilePath = "wallets.json"
+	JsonIndent   = "    "
+	JsonPrefix
 )
 
 // LoadWallets reads the wallet JSON file
 func LoadWallets() ([]Wallet, error) {
-	data, err := os.ReadFile(jsonFilePath)
+	data, err := os.ReadFile(JsonFilePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return []Wallet{}, nil
@@ -35,11 +37,11 @@ func LoadWallets() ([]Wallet, error) {
 
 // SaveWallets writes the wallet list back to the json file
 func SaveWallets(wallets []Wallet) error {
-	data, err := json.MarshalIndent(wallets, "", "    ")
+	data, err := json.MarshalIndent(wallets, JsonPrefix, JsonIndent)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(jsonFilePath, data, 0644)
+	return os.WriteFile(JsonFilePath, data, 0644)
 }
 
 func IsWalletExist(wallets []Wallet, name string) bool {

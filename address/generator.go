@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var coinsList = []string{"eth"}
+
 func HandleCoinAddressGenerator(walletName, coinName string) (*wallet.Address, error) {
 	walletInstance, err := wallet.GetWalletInstance(walletName)
 	if err != nil {
@@ -42,13 +44,13 @@ func HandleCoinAddressGenerator(walletName, coinName string) (*wallet.Address, e
 	if err != nil {
 		return nil, err
 	}
-	
+
 	for i, w := range wallets {
 		if w.Name == walletName {
 			wallets[i] = *walletInstance
 		}
 	}
-	
+
 	err = wallet.SaveWallets(wallets)
 	if err != nil {
 		return nil, err
@@ -59,14 +61,14 @@ func HandleCoinAddressGenerator(walletName, coinName string) (*wallet.Address, e
 
 func generateAddress(mnemonic []byte, coinName string) ([]byte, error) {
 	switch coinName {
-	case "ethereum":
+	case "eth":
 		var eth = &Ethereum{
 			RawMnemonic: mnemonic,
 		}
 
 		return eth.GenerateEthereumAddress(0)
 	default:
-		return nil, fmt.Errorf("ERROR invalid coin name: %s", coinName)
+		return nil, fmt.Errorf("ERROR invalid coin name: %s, available coins: %s", coinName, coinsList)
 	}
 }
 

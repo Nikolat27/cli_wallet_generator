@@ -6,6 +6,10 @@ import (
 	"fmt"
 )
 
+const (
+	nameFlag = "--n"
+)
+
 func HandleWalletCommands(inputs []string) error {
 	if len(inputs) < 2 {
 		return errors.New("missing subcommand for wallet (e.g., create, get, delete, list) ⚠️ ")
@@ -27,24 +31,24 @@ func HandleWalletCommands(inputs []string) error {
 }
 
 func handleCreate(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != "--name" {
-		return errors.New("usage: wallet create --name <walletName> ⚠️ ")
+	if len(inputs) < 4 || inputs[2] != nameFlag {
+		return errors.New("usage: wallet create --n <walletName> ⚠️ ")
 	}
 	walletName := inputs[3]
 	return wallet.CreateWallet(walletName)
 }
 
 func handleGet(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != "--name" {
-		return errors.New("usage: wallet get --name <walletName> ⚠️ ")
+	if len(inputs) < 4 || inputs[2] != nameFlag {
+		return errors.New("usage: wallet get --n <walletName> ⚠️ ")
 	}
 	walletName := inputs[3]
 	return wallet.GetWallet(walletName)
 }
 
 func handleDelete(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != "--name" {
-		return errors.New("usage: wallet delete --name <walletName> ⚠️ ")
+	if len(inputs) < 4 || inputs[2] != nameFlag {
+		return errors.New("usage: wallet delete --n <walletName> ⚠️ ")
 	}
 	walletName := inputs[3]
 	return wallet.DeleteWallet(walletName)

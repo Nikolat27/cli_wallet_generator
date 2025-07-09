@@ -14,5 +14,21 @@
                 "created_at": "2025-07-09T14:21:31.003550944+03:30"
             }
         ]
+    },
+    {
+        "name": "w2",
+        "mnemonic": "/KcI6GTqd1WDouGKOHj/cdovwxsxT+6KX3GVqB0ZCdnpjcMn3BkWZLcx+1M6Mc8noQ1FIIPUaZV+XoGh8NFU2qI3Ytp/9iOTLIxe3Av/ah0Fw9AlxGtx/+Dv15X9BtpvWWHZJEEk4A==",
+        "addresses": [
+            {
+                "coin": "ethereum",
+                "address": "MHgyMzk5YzZmOGVjMjc5ZTg2MzkyMGY4MDdkZjk1NDczZWIzNTQxMzc4",
+                "created_at": "2025-07-09T14:29:20.661296433+03:30"
+            },
+            {
+                "coin": "ethereum",
+                "address": "MHgyMzk5YzZmOGVjMjc5ZTg2MzkyMGY4MDdkZjk1NDczZWIzNTQxMzc4",
+                "created_at": "2025-07-09T14:29:26.790977927+03:30"
+            }
+        ]
     }
 ]
