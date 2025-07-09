@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	if err := loadEnv(); err != nil {
+	if err := godotenv.Load(); err != nil {
 		panic(err)
 	}
 
@@ -31,8 +31,4 @@ func main() {
 			fmt.Println(err)
 		}
 	}
-}
-
-func loadEnv() error {
-	return godotenv.Load()
 }
