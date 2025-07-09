@@ -1,7 +1,7 @@
 package bip39
 
 import (
-	bip39 "github.com/tyler-smith/go-bip39"
+	"github.com/tyler-smith/go-bip39"
 )
 
 type WalletSeed struct {
@@ -9,7 +9,7 @@ type WalletSeed struct {
 	Seed     []byte
 }
 
-func Init() (*WalletSeed, error) {
+func InitWallet() (*WalletSeed, error) {
 	entropy, err := bip39.NewEntropy(128)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func Init() (*WalletSeed, error) {
 
 	w := &WalletSeed{
 		Mnemonic: []byte(mnemonic),
-		Seed:     []byte(seed),
+		Seed:     seed,
 	}
 
 	return w, nil
