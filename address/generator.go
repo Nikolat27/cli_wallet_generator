@@ -9,9 +9,10 @@ import (
 	"time"
 )
 
-type AddressGeneratorFunc func(mnemonic []byte, accountIndex uint32) ([]byte, error)
+type DeriveAddressFunc func(wallet *wallet.Wallet) ([]byte, error)
 
-var addressGenerators = map[string]AddressGeneratorFunc{
+var addressGenerators = map[string]DeriveAddressFunc{
+	"btc": GenerateBitcoinAddress,
 	"eth": GenerateEthereumAddress,
 }
 
@@ -58,7 +59,7 @@ func loadWalletWithMnemonic(walletName string) (*wallet.Wallet, error) {
 }
 
 func createAddressFromWallet(w *wallet.Wallet, coinName string) (*wallet.Address, error) {
-	coinAddress, err := generateCoinAddress(w.RawMnemonic, coinName, 0)
+	coinAddress, err := generateCoinAddress(w, coinName)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +68,7 @@ func createAddressFromWallet(w *wallet.Wallet, coinName string) (*wallet.Address
 
 	addr := &wallet.Address{
 		Coin:      coinName,
-		Address:   coinAddress,
+		Address:   string(coinAddress),
 		CreatedAt: time.Now(),
 	}
 
@@ -75,12 +76,12 @@ func createAddressFromWallet(w *wallet.Wallet, coinName string) (*wallet.Address
 	return addr, nil
 }
 
-func generateCoinAddress(mnemonic []byte, coin string, index uint32) ([]byte, error) {
+func generateCoinAddress(w *wallet.Wallet, coin string) ([]byte, error) {
 	generator, exists := addressGenerators[coin]
 	if !exists {
 		return nil, fmt.Errorf("unsupported coin: %s", coin)
 	}
-	return generator(mnemonic, index)
+	return generator(w)
 }
 
 func updateWalletChanges(updated *wallet.Wallet) error {

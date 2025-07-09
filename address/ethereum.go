@@ -1,6 +1,7 @@
 package address
 
 import (
+	"cli_wallet_generator/wallet"
 	"crypto/ecdsa"
 	"fmt"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -16,15 +17,18 @@ const (
 )
 
 type Ethereum struct {
-	RawMnemonic []byte
+	RawMnemonic []byte `json:"-"`
 }
 
-func GenerateEthereumAddress(mnemonic []byte, accountIndex uint32) ([]byte, error) {
-	eth := &Ethereum{RawMnemonic: mnemonic}
-	return eth.generateAddress(accountIndex)
+func GenerateEthereumAddress(wallet *wallet.Wallet) ([]byte, error) {
+	eth := &Ethereum{RawMnemonic: wallet.RawMnemonic}
+
+	addressIndex := eth.getNextAddressIndex(wallet)
+
+	return eth.generateAddress(addressIndex)
 }
 
-func (e *Ethereum) generateAddress(account uint32) ([]byte, error) {
+func (e *Ethereum) generateAddress(addressIndex uint32) ([]byte, error) {
 	seed := bip39.NewSeed(string(e.RawMnemonic), "")
 
 	masterKey, err := bip32.NewMasterKey(seed)
@@ -42,7 +46,7 @@ func (e *Ethereum) generateAddress(account uint32) ([]byte, error) {
 		return nil, err
 	}
 
-	accountKey, err := coinTypeKey.NewChildKey(bip32.FirstHardenedChild + account)
+	accountKey, err := coinTypeKey.NewChildKey(bip32.FirstHardenedChild + addressIndex)
 	if err != nil {
 		return nil, err
 	}
@@ -84,4 +88,19 @@ func deriveAddressFromPrivateKey(privateKey *ecdsa.PrivateKey) ([]byte, error) {
 	address := "0x" + fmt.Sprintf("%x", addressBytes)
 
 	return []byte(address), nil
+}
+
+func (e *Ethereum) getName() string {
+	return "eth"
+}
+
+func (e *Ethereum) getNextAddressIndex(wallet *wallet.Wallet) uint32 {
+	var count uint32
+	for _, addr := range wallet.Addresses {
+		if addr.Coin == e.getName() {
+			count++
+		}
+	}
+
+	return count
 }
