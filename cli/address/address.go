@@ -16,12 +16,11 @@ func HandleAddressCommands(inputs []string) error {
 		return errors.New("missing subcommand for address (e.g., create, get, delete, list) ⚠️ ")
 	}
 
-	command := inputs[1]
-	switch command {
+	switch cmd := inputs[1]; cmd{
 	case "create":
 		return handleCreate(inputs)
 	default:
-		return fmt.Errorf("unknown address subcommand: %s ❌  ", command)
+		return fmt.Errorf("unknown address subcommand: %s ❌  ", cmd)
 	}
 }
 
