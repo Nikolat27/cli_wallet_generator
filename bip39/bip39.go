@@ -29,6 +29,10 @@ func InitWallet() (*WalletSeed, error) {
 		Seed:     seed,
 	}
 
+	if err := w.copyToClipboard(); err != nil {
+		return nil, err
+	}
+
 	return w, nil
 }
 
@@ -44,12 +48,12 @@ func (w *WalletSeed) SeedString() string {
 	return string(w.Seed)
 }
 
-func (w *WalletSeed) CopyToClipboard() error {
+func (w *WalletSeed) copyToClipboard() error {
 	if err := clipboard.WriteAll(w.SeedString()); err != nil {
 		return fmt.Errorf("failed to copy mnemonic to clipboard: %w", err)
 	}
 
 	fmt.Println("⚠️ 12-word seed copied to your clipboard. Keep it safe! ⚠️")
-	
+
 	return nil
 }
