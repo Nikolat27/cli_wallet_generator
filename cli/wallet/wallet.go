@@ -38,11 +38,12 @@ func HandleWalletCommands(inputs []string) error {
 }
 
 func (c *Commands) create(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
-		return errors.New("usage: wallet create --n <walletName> ⚠️ ")
+	walletName, err := extractWalletName(inputs)
+	if err != nil {
+		return err
 	}
 
-	c.Wallet.Name = inputs[3]
+	c.Wallet.Name = walletName
 
 	if err := c.Wallet.CreateWallet(); err != nil {
 		return err
@@ -53,11 +54,12 @@ func (c *Commands) create(inputs []string) error {
 }
 
 func (c *Commands) get(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
-		return fmt.Errorf("usage: wallet get %s <walletName>", WalletNameFlag)
+	walletName, err := extractWalletName(inputs)
+	if err != nil {
+		return err
 	}
 
-	c.Wallet.Name = inputs[3]
+	c.Wallet.Name = walletName
 
 	w, err := c.Wallet.GetWalletInstance()
 	if err != nil {
@@ -69,11 +71,12 @@ func (c *Commands) get(inputs []string) error {
 }
 
 func (c *Commands) delete(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
-		return fmt.Errorf("usage: wallet delete %s <walletName> ⚠️ ", WalletNameFlag)
+	walletName, err := extractWalletName(inputs)
+	if err != nil {
+		return err
 	}
-
-	c.Wallet.Name = inputs[3]
+	
+	c.Wallet.Name = walletName
 
 	return c.Wallet.DeleteWallet()
 }
@@ -89,4 +92,11 @@ func (c *Commands) list() error {
 	}
 
 	return nil
+}
+
+func extractWalletName(inputs []string) (string, error) {
+	if len(inputs) < 4 || inputs[2] != WalletNameFlag || inputs[3] == "" {
+		return "", errors.New("missing or invalid wallet name flag")
+	}
+	return inputs[3], nil
 }
