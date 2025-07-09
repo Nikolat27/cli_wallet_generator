@@ -1,7 +1,6 @@
 package currency
 
 import (
-	"cli_wallet_generator/bip39"
 	"crypto/ecdsa"
 	"fmt"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -22,27 +21,28 @@ const (
 
 // CreateAddress derives Ethereum address from mnemonic using BIP44 with go-bip32 lib
 func (e *Ethereum) CreateAddress() (string, error) {
-	seed, err := bip39.NewSeed(e.Mnemonic)
-	if err != nil {
-		return "", err
-	}
+	// seed, err := bip39.NewSeed(e.Mnemonic)
+	// if err != nil {
+	// 	return "", err
+	// }
 
-	masterKey, err := bip32.NewMasterKey(seed.RawSeed)
-	if err != nil {
-		return "", err
-	}
+	// masterKey, err := bip32.NewMasterKey(seed.RawSeed)
+	// if err != nil {
+	// 	return "", err
+	// }
 
-	purposeKey, err := masterKey.NewChildKey(bip32.FirstHardenedChild + Purpose)
-	if err != nil {
-		return "", err
-	}
+	// purposeKey, err := masterKey.NewChildKey(bip32.FirstHardenedChild + Purpose)
+	// if err != nil {
+	// 	return "", err
+	// }
 
-	address, err := deriveBIP44(purposeKey)
-	if err != nil {
-		return "", err
-	}
+	// address, err := deriveBIP44(purposeKey)
+	// if err != nil {
+	// 	return "", err
+	// }
 
-	return address, nil
+	// return address, nil
+	return "", nil
 }
 
 func deriveBIP44(purposeKey *bip32.Key) (string, error) {

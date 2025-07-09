@@ -1,8 +1,22 @@
-{
-    "wallets": [
-        {
-            "name": "wl1",
-            "address": "testAddr"
-        }
-    ]
-}
+[
+	{
+		"name": "e1",
+		"mnemonic": "yKcHnNoIGXuezUScFnYhAcFW9PTxM8yU30IPdIt0dcq2bFcYl1booIblfh4W8mxIIWa4mEpsKrehNsaiD2vBXgLLsy2KfRKzILJC72coYzbAIvnevJs6PaCTKv5xBkr6hdIh9jAipJcN1hE=",
+		"address": ""
+	},
+	{
+		"name": "w1",
+		"mnemonic": "BtTi27V7Gi2Rj23MFg4iyuv4CVKGjVPdJKPuAvVxn9ubRxKBYIwZZl7JZLPiAMjnBRQ9UOa4WwYeDRnO1U3+zEMm2JyfhT1dK30hVpV9LQrwK+7vCSsEkgKoCWAffwz63fU1KA==",
+		"address": ""
+	},
+	{
+		"name": "w2",
+		"mnemonic": "8GtGEYSoWzgmn0HU5capQTW5op9JQNIFRQvajUpZINdycBZsZ+KB3Wr/vd4LSYvqgn0HQnyVPVF7/4i5XTN6d5q8NoXwgsxeha/DGKv7rJop/WhAifs3HdpJCVWMackaytNu3w==",
+		"address": ""
+	},
+	{
+		"name": "w3",
+		"mnemonic": "pEDJs57aiILrDM3UmGeMsoCLOVUSp/tI18ELe4FdHHJTcKlFowUal46TXzxhTodcO0rhMM9ROsmqb+a6D2qD+9snmo9GPr6HkxTCIvkYJGlVqsoLBr3vy4T/Gy16EBuh2vrU5lU4P9xFf8tfhNRGQg==",
+		"address": ""
+	}
+]

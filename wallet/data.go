@@ -82,3 +82,39 @@ func AddWallet(wallets []Wallet, name, encryptedMnemonic, address string) error 
 	fmt.Println("Wallet Added Successfully")
 	return nil
 }
+
+func getWallet(walletName string) (*Wallet, error) {
+	wallets, err := loadWallets()
+	if err != nil {
+		return nil, err
+	}
+
+	if !walletExists(wallets, walletName) {
+		return nil, fmt.Errorf("ERROR: wallet name '%s' does not exists", walletName)
+	}
+
+	for _, wallet := range wallets {
+		if wallet.Name == walletName {
+			return &wallet, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func deleteWallet(walletName string) error {
+	wallets, err := loadWallets()
+	if err != nil {
+		return err
+	}
+
+	if !walletExists(wallets, walletName) {
+		return fmt.Errorf("ERROR: wallet name '%s' does not exists", walletName)
+	}
+
+	for idx, wallet := range wallets {
+		fmt.Println(idx, wallet)
+	}
+	
+	return nil
+}

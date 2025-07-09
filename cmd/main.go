@@ -4,11 +4,16 @@ import (
 	"bufio"
 	"cli_wallet_generator/cli"
 	"fmt"
+	"github.com/joho/godotenv"
 	"os"
 	"strings"
 )
 
 func main() {
+	if err := loadEnv(); err != nil {
+		panic(err)
+	}
+
 	fmt.Println("Enter your commands: ")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -26,4 +31,8 @@ func main() {
 			fmt.Println(err)
 		}
 	}
+}
+
+func loadEnv() error {
+	return godotenv.Load()
 }
