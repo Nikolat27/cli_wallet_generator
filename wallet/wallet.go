@@ -12,6 +12,7 @@ type Wallet struct {
 	Name      string    `json:"name"`
 	Mnemonic  string    `json:"mnemonic"`
 	Addresses []Address `json:"addresses"`
+	RawMnemonic []byte
 }
 
 type Address struct {
@@ -26,7 +27,7 @@ func Constructor() *Wallet {
 
 // CreateWallet generates a new wallet, encrypts the mnemonic, and saves it
 func (w *Wallet) CreateWallet() error {
-	wallets, err := LoadWallets()
+	wallets, err := LoadFromDisk()
 	if err != nil {
 		return fmt.Errorf("failed to load wallets: %w", err)
 	}
@@ -53,7 +54,7 @@ func (w *Wallet) CreateWallet() error {
 }
 
 func (w *Wallet) ListWallets() ([]Wallet, error) {
-	wallets, err := LoadWallets()
+	wallets, err := LoadFromDisk()
 	if err != nil {
 		return nil, fmt.Errorf("loading wallets failed: %w", err)
 	}
@@ -71,7 +72,7 @@ func (w *Wallet) GetWalletInstance() (*Wallet, error) {
 }
 
 func (w *Wallet) DeleteWallet() error {
-	wallets, err := LoadWallets()
+	wallets, err := LoadFromDisk()
 	if err != nil {
 		return fmt.Errorf("failed to load wallets: %w", err)
 	}
@@ -83,7 +84,7 @@ func (w *Wallet) DeleteWallet() error {
 
 	wallets = slices.Delete(wallets, idx, idx+1)
 
-	if err := SaveWallets(wallets); err != nil {
+	if err := SaveToDisk(wallets); err != nil {
 		return fmt.Errorf("failed to save wallets after deletion: %w", err)
 	}
 
@@ -93,4 +94,49 @@ func (w *Wallet) DeleteWallet() error {
 
 func (w *Wallet) AddAddress(address *Address) {
 	w.Addresses = append(w.Addresses, *address)
+}
+
+func (w *Wallet) ClearRawMnemonic() {
+	w.RawMnemonic = nil
+}
+
+func IsWalletExist(wallets []Wallet, name string) bool {
+	index := indexOfWallet(wallets, name)
+	return index != -1
+}
+
+func indexOfWallet(wallets []Wallet, name string) int {
+	for idx, wallet := range wallets {
+		if wallet.Name == name {
+			return idx
+		}
+	}
+	return -1
+}
+
+func findWalletByName(name string) (*Wallet, error) {
+	wallets, err := LoadFromDisk()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, wallet := range wallets {
+		if wallet.Name == name {
+			return &wallet, nil
+		}
+	}
+	return nil, fmt.Errorf("wallet '%s' not found", name)
+}
+
+func addWallet(wallets []Wallet, name, encryptedMnemonic string, addresses []Address) error {
+	wallets = append(wallets, Wallet{
+		Name:      name,
+		Mnemonic:  encryptedMnemonic,
+		Addresses: addresses,
+	})
+
+	if err := SaveToDisk(wallets); err != nil {
+		return err
+	}
+	return nil
 }

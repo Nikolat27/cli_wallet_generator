@@ -1,0 +1,25 @@
+[
+        {
+            "name": "w2",
+            "mnemonic": "dTG9HBCEJsLBDpT8HL1XT+8pvfkn4jQNDiAxJ7fD1v+VJAMbilDPMX1uprglUjhKMOiKS+eixt6fYb1uiLm3LLU3OUdXBaqJXs+iV+zKdLnbJacnmClT0dFTVC7ujjdh/w==",
+            "addresses": [
+                {
+                    "coin": "eth",
+                    "address": "MHhhYWJmYzgxZjJkMTZmZjNlN2RjOTNiNDYxNzU4YTQwZmU2MmI1YzNl",
+                    "created_at": "2025-07-09T17:59:41.027667254+03:30"
+                },
+                {
+                    "coin": "eth",
+                    "address": "MHhhYWJmYzgxZjJkMTZmZjNlN2RjOTNiNDYxNzU4YTQwZmU2MmI1YzNl",
+                    "created_at": "2025-07-09T17:59:49.545026792+03:30"
+                }
+            ],
+            "RawMnemonic": null
+        },
+        {
+            "name": "w3",
+            "mnemonic": "14zq1Ja7tvabklExDyjRHyxyOyu0G+D/MG00BkUwTVOiRVGCcI8yQqrePZRO4s+8HFF2+c49zGooUHx/hf9Rt1AQpNp8Gy98tHWkEg+19jouKMcj3fxYZKuNz8eloEfiME8SDi0qrRk=",
+            "addresses": null,
+            "RawMnemonic": null
+        }
+    ]
