@@ -1,10 +1,10 @@
 package wallet
 
 import (
-"encoding/json"
-"errors"
-"fmt"
-"os"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
 )
 
 const (
@@ -13,8 +13,8 @@ const (
 	JsonPrefix
 )
 
-// LoadWallets reads the wallet JSON file
-func LoadWallets() ([]Wallet, error) {
+// LoadFromDisk -> reads the wallet JSON file
+func LoadFromDisk() ([]Wallet, error) {
 	data, err := os.ReadFile(JsonFilePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -35,8 +35,8 @@ func LoadWallets() ([]Wallet, error) {
 	return wallets, nil
 }
 
-// SaveWallets writes the wallet list back to the json file
-func SaveWallets(wallets []Wallet) error {
+// SaveToDisk -> writes the wallet list back to the json file
+func SaveToDisk(wallets []Wallet) error {
 	data, err := json.MarshalIndent(wallets, JsonPrefix, JsonIndent)
 	if err != nil {
 		return fmt.Errorf("ERROR json marshaling the data: %s", err)
@@ -46,46 +46,5 @@ func SaveWallets(wallets []Wallet) error {
 		return fmt.Errorf("ERROR writing json file: %s", err)
 	}
 
-	return nil
-}
-
-func IsWalletExist(wallets []Wallet, name string) bool {
-	index := indexOfWallet(wallets, name)
-	return index != -1
-}
-
-func indexOfWallet(wallets []Wallet, name string) int {
-	for idx, wallet := range wallets {
-		if wallet.Name == name {
-			return idx
-		}
-	}
-	return -1
-}
-
-func findWalletByName(name string) (*Wallet, error) {
-	wallets, err := LoadWallets()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, wallet := range wallets {
-		if wallet.Name == name {
-			return &wallet, nil
-		}
-	}
-	return nil, fmt.Errorf("wallet '%s' not found", name)
-}
-
-func addWallet(wallets []Wallet, name, encryptedMnemonic string, addresses []Address) error {
-	wallets = append(wallets, Wallet{
-		Name:      name,
-		Mnemonic:  encryptedMnemonic,
-		Addresses: addresses,
-	})
-
-	if err := SaveWallets(wallets); err != nil {
-		return err
-	}
 	return nil
 }
