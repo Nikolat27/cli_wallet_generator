@@ -26,16 +26,24 @@ func HandleAddressCommands(inputs []string) error {
 }
 
 func handleCreate(inputs []string) error {
-	if len(inputs) < 6 || inputs[2] != walletNameFlag || inputs[3] == "" || inputs[4] != coinNameFlag || inputs[5] == "" {
-		return errors.New("invalid subcommand for coinAddress (e.g., create, get, delete, list) ⚠️ ")
+	if err := isCommandValid(inputs); err != nil {
+		return err
 	}
 
 	walletName := inputs[3]
 	coinName := inputs[5]
 
-	_, err := address.HandleCoinAddressGenerator(walletName, coinName)
+	_, err := address.GenerateAndStoreAddress(walletName, coinName)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func isCommandValid(inputs []string) error {
+	if len(inputs) < 6 || inputs[2] != walletNameFlag || inputs[3] == "" || inputs[4] != coinNameFlag || inputs[5] == "" {
+		return errors.New("invalid subcommand for coinAddress (e.g., create, get, delete, list) ⚠️ ")
 	}
 
 	return nil
