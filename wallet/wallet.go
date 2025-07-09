@@ -13,6 +13,7 @@ type Wallet struct {
 	Mnemonic    string    `json:"mnemonic"`
 	Addresses   []Address `json:"addresses"`
 	RawMnemonic []byte    `json:"-"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
 type Address struct {
@@ -88,7 +89,7 @@ func (w *Wallet) DeleteWallet() error {
 		return fmt.Errorf("failed to save wallets after deletion: %w", err)
 	}
 
-	fmt.Printf("Wallet '%s' deleted successfully ✅\n", w.Name)
+	fmt.Printf("Wallet '%s' deleted successfully ✅ \n", w.Name)
 	return nil
 }
 
@@ -133,6 +134,7 @@ func addWallet(wallets []Wallet, name, encryptedMnemonic string, addresses []Add
 		Name:      name,
 		Mnemonic:  encryptedMnemonic,
 		Addresses: addresses,
+		CreatedAt: time.Now(),
 	})
 
 	if err := SaveToDisk(wallets); err != nil {

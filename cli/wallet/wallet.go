@@ -75,7 +75,7 @@ func (c *Commands) delete(inputs []string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	c.Wallet.Name = walletName
 
 	return c.Wallet.DeleteWallet()
@@ -88,9 +88,8 @@ func (c *Commands) list() error {
 	}
 
 	for idx, w := range wallets {
-		fmt.Printf("Wallet %d: %s\n", idx, w)
+		fmt.Printf("%d. Wallet: %s, created: %s\n", idx+1, w.Name, w.CreatedAt.Format("2006-01-02"))
 	}
-
 	return nil
 }
 
