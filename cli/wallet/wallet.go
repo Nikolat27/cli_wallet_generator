@@ -10,33 +10,41 @@ const (
 	WalletNameFlag = "-n"
 )
 
+type Commands struct {
+	Wallet *wallet.Wallet
+}
+
 func HandleWalletCommands(inputs []string) error {
 	if len(inputs) < 2 {
 		return errors.New("missing subcommand for wallet (e.g., create, get, delete, list) ⚠️ ")
 	}
 
-	command := inputs[1]
-	switch command {
+	c := &Commands{
+		Wallet: wallet.Constructor(),
+	}
+
+	switch cmd := inputs[1]; cmd {
 	case "create":
-		return handleCreate(inputs)
+		return c.create(inputs)
 	case "get":
-		return handleGet(inputs)
+		return c.get(inputs)
 	case "delete":
-		return handleDelete(inputs)
+		return c.delete(inputs)
 	case "list":
-		return handleList()
+		return c.list()
 	default:
-		return fmt.Errorf("unknown wallet subcommand: %s ❌  ", command)
+		return fmt.Errorf("unknown wallet subcommand: %s ❌ ", cmd)
 	}
 }
 
-func handleCreate(inputs []string) error {
+func (c *Commands) create(inputs []string) error {
 	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
 		return errors.New("usage: wallet create --n <walletName> ⚠️ ")
 	}
-	walletName := inputs[3]
 
-	if err := wallet.CreateWallet(walletName); err != nil {
+	c.Wallet.Name = inputs[3]
+
+	if err := c.Wallet.CreateWallet(); err != nil {
 		return err
 	}
 
@@ -44,13 +52,14 @@ func handleCreate(inputs []string) error {
 	return nil
 }
 
-func handleGet(inputs []string) error {
+func (c *Commands) get(inputs []string) error {
 	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
 		return fmt.Errorf("usage: wallet get %s <walletName>", WalletNameFlag)
 	}
 
-	walletName := inputs[3]
-	w, err := wallet.GetWalletInstance(walletName)
+	c.Wallet.Name = inputs[3]
+
+	w, err := c.Wallet.GetWalletInstance()
 	if err != nil {
 		return err
 	}
@@ -59,16 +68,18 @@ func handleGet(inputs []string) error {
 	return nil
 }
 
-func handleDelete(inputs []string) error {
+func (c *Commands) delete(inputs []string) error {
 	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
 		return fmt.Errorf("usage: wallet delete %s <walletName> ⚠️ ", WalletNameFlag)
 	}
-	walletName := inputs[3]
-	return wallet.DeleteWallet(walletName)
+
+	c.Wallet.Name = inputs[3]
+
+	return c.Wallet.DeleteWallet()
 }
 
-func handleList() error {
-	wallets, err := wallet.ListWallets()
+func (c *Commands) list() error {
+	wallets, err := c.Wallet.ListWallets()
 	if err != nil {
 		return err
 	}
