@@ -1,12 +1,18 @@
 [
-        {
-            "name": "w1",
-            "mnemonic": "LgelhuHDi0aLpcgJLLwYHrQlOVofSWTQwsvVXx7wdpcD3yC7ROlJkok8MgWjXOEHE3pSlZuM4qVW1wNQnesJKyLcAvSrxOkLSvwEe9bp8UoC0oXwbE2lWTO+j/PzsWo/314rzu2eJw==",
-            "addresses": null
-        },
-        {
-            "name": "w2",
-            "mnemonic": "Wpc1PuRr4AqGpefSlL9PVRgsh9ICRJjbUJno6I8mVR7AiDynS58zFeL81UQne/OJUs45nC8nrKm+vrTtZTi3kmmjYWDKblyOmh+En2EfWyYzNbO8qgr0eOxx1Br/d/vgmJvsizb77hQ=",
-            "addresses": null
-        }
+  {
+    "name": "w1",
+    "mnemonic": "5cvM+Zt25pG3rBmwjsLEH8wvosnd3qzpj5qlw3hwv8hvcctn/UtpjaftbvxLHsCOnu2slVf0VQcx4cwoHAF7DLErttDHEvMdp1yjfZVYSq87G7s5Y+wCww7ggn63HEh3+0QwqlwZ",
+    "addresses": [
+      {
+        "coin": "btc",
+        "address": "1JFQC7LPBWHKeA8ukugipM745ptshLLcw1",
+        "created_at": "2025-07-09T18:54:47.188687876+03:30"
+      },
+      {
+        "coin": "btc",
+        "address": "16Jhk7hXTMVE5hr2SqmcyhwbYe7L4z7ZfU",
+        "created_at": "2025-07-09T18:55:06.394335597+03:30"
+      }
     ]
+  }
+]
