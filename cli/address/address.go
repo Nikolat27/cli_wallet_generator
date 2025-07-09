@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	walletNameFlag = "--w"
-	coinNameFlag   = "--c"
+	walletNameFlag = "-w"
+	coinNameFlag   = "-c"
 )
 
 func HandleAddressCommands(inputs []string) error {

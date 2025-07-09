@@ -4,7 +4,6 @@ import (
 	"cli_wallet_generator/bip39"
 	"cli_wallet_generator/crypto"
 	"fmt"
-	"github.com/atotto/clipboard"
 	"slices"
 )
 
@@ -21,7 +20,7 @@ func CreateWallet(walletName string) error {
 		return fmt.Errorf("failed to load wallets: %w", err)
 	}
 
-	if IsWalletExist(wallets, walletName) {
+	if exists := IsWalletExist(wallets, walletName); exists {
 		return fmt.Errorf("this wallet name '%s' already exists (must be unique)", walletName)
 	}
 
@@ -30,43 +29,29 @@ func CreateWallet(walletName string) error {
 		return fmt.Errorf("failed to generate seed: %w", err)
 	}
 
-	if err := clipboard.WriteAll(seed.MnemonicString()); err != nil {
-		return fmt.Errorf("failed to copy mnemonic to clipboard: %w", err)
+	if err := seed.CopyToClipboard(); err != nil {
+		return err
 	}
-	fmt.Println("⚠️ 12-word seed copied to your clipboard. Keep it safe! ⚠️")
 
 	encryptedMnemonic, err := crypto.EncryptBase64(seed.Mnemonic)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt mnemonic: %w", err)
 	}
 
-	return addWallet(wallets, walletName, encryptedMnemonic, nil)
-}
-
-func ListWallets() error {
-	wallets, err := LoadWallets()
-	if err != nil {
-		return fmt.Errorf("loading wallets failed: %w", err)
-	}
-
-	if len(wallets) == 0 {
-		fmt.Println("No wallets found.")
-		return nil
-	}
-
-	for idx, wallet := range wallets {
-		fmt.Printf("Wallet %d: %s\n", idx+1, wallet.Name)
-	}
-	return nil
-}
-
-func GetWallet(walletName string) error {
-	wallet, err := findWalletByName(walletName)
-	if err != nil {
+	if err := addWallet(wallets, walletName, encryptedMnemonic, nil); err != nil {
 		return err
 	}
-	fmt.Printf("Wallet: %+v\n", *wallet)
+
 	return nil
+}
+
+func ListWallets() ([]Wallet, error) {
+	wallets, err := LoadWallets()
+	if err != nil {
+		return nil, fmt.Errorf("loading wallets failed: %w", err)
+	}
+
+	return wallets, nil
 }
 
 func GetWalletInstance(walletName string) (*Wallet, error) {
@@ -74,7 +59,7 @@ func GetWalletInstance(walletName string) (*Wallet, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return wallet, nil
 }
 

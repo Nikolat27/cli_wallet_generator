@@ -1,6 +1,8 @@
 package bip39
 
 import (
+	"fmt"
+	"github.com/atotto/clipboard"
 	"github.com/tyler-smith/go-bip39"
 )
 
@@ -40,4 +42,14 @@ func (w *WalletSeed) MnemonicString() string {
 
 func (w *WalletSeed) SeedString() string {
 	return string(w.Seed)
+}
+
+func (w *WalletSeed) CopyToClipboard() error {
+	if err := clipboard.WriteAll(w.SeedString()); err != nil {
+		return fmt.Errorf("failed to copy mnemonic to clipboard: %w", err)
+	}
+
+	fmt.Println("⚠️ 12-word seed copied to your clipboard. Keep it safe! ⚠️")
+	
+	return nil
 }

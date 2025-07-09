@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	nameFlag = "--n"
+	WalletNameFlag = "-n"
 )
 
 func HandleWalletCommands(inputs []string) error {
@@ -31,29 +31,51 @@ func HandleWalletCommands(inputs []string) error {
 }
 
 func handleCreate(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != nameFlag {
+	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
 		return errors.New("usage: wallet create --n <walletName> ⚠️ ")
 	}
 	walletName := inputs[3]
-	return wallet.CreateWallet(walletName)
+
+	if err := wallet.CreateWallet(walletName); err != nil {
+		return err
+	}
+
+	fmt.Println("Wallet added successfully ✅  ")
+	return nil
 }
 
 func handleGet(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != nameFlag {
-		return errors.New("usage: wallet get --n <walletName> ⚠️ ")
+	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
+		return fmt.Errorf("usage: wallet get %s <walletName>", WalletNameFlag)
 	}
+
 	walletName := inputs[3]
-	return wallet.GetWallet(walletName)
+	w, err := wallet.GetWalletInstance(walletName)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Wallet: %+v\n", *w)
+	return nil
 }
 
 func handleDelete(inputs []string) error {
-	if len(inputs) < 4 || inputs[2] != nameFlag {
-		return errors.New("usage: wallet delete --n <walletName> ⚠️ ")
+	if len(inputs) < 4 || inputs[2] != WalletNameFlag {
+		return fmt.Errorf("usage: wallet delete %s <walletName> ⚠️ ", WalletNameFlag)
 	}
 	walletName := inputs[3]
 	return wallet.DeleteWallet(walletName)
 }
 
 func handleList() error {
-	return wallet.ListWallets()
+	wallets, err := wallet.ListWallets()
+	if err != nil {
+		return err
+	}
+
+	for idx, w := range wallets {
+		fmt.Printf("Wallet %d: %s\n", idx, w)
+	}
+
+	return nil
 }

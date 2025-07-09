@@ -1,10 +1,10 @@
 package wallet
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-	"os"
+"encoding/json"
+"errors"
+"fmt"
+"os"
 )
 
 const (
@@ -39,19 +39,25 @@ func LoadWallets() ([]Wallet, error) {
 func SaveWallets(wallets []Wallet) error {
 	data, err := json.MarshalIndent(wallets, JsonPrefix, JsonIndent)
 	if err != nil {
-		return err
+		return fmt.Errorf("ERROR json marshaling the data: %s", err)
 	}
-	return os.WriteFile(JsonFilePath, data, 0644)
+
+	if err := os.WriteFile(JsonFilePath, data, 0644); err != nil {
+		return fmt.Errorf("ERROR writing json file: %s", err)
+	}
+
+	return nil
 }
 
 func IsWalletExist(wallets []Wallet, name string) bool {
-	return indexOfWallet(wallets, name) != -1
+	index := indexOfWallet(wallets, name)
+	return index != -1
 }
 
 func indexOfWallet(wallets []Wallet, name string) int {
-	for i, wallet := range wallets {
+	for idx, wallet := range wallets {
 		if wallet.Name == name {
-			return i
+			return idx
 		}
 	}
 	return -1
@@ -81,7 +87,5 @@ func addWallet(wallets []Wallet, name, encryptedMnemonic string, addresses []Add
 	if err := SaveWallets(wallets); err != nil {
 		return err
 	}
-
-	fmt.Println("Wallet added successfully ✅  ")
 	return nil
 }

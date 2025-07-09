@@ -7,7 +7,8 @@ import (
 )
 
 func HandleUserCommand(inputs []string) error {
-	switch inputs[0] {
+	firstCommand := inputs[0]
+	switch firstCommand {
 	case "wallet":
 		return wallet.HandleWalletCommands(inputs)
 	case "address":
