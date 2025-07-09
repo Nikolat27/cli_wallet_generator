@@ -16,7 +16,7 @@ var addressGenerators = map[string]DeriveAddressFunc{
 	"eth": GenerateEthereumAddress,
 }
 
-// GenerateAndStoreAddress -> Main func
+// GenerateAndStoreAddress -> Coin Address Creator
 func GenerateAndStoreAddress(walletName, coinName string) (*wallet.Address, error) {
 	w, err := loadWalletWithMnemonic(walletName)
 	if err != nil {
@@ -106,4 +106,20 @@ func getSecretKey() (string, error) {
 		return "", errors.New("SECRET_KEY environment variable is missing")
 	}
 	return key, nil
+}
+
+func RetrieveAddressList(walletName string) ([]wallet.Address, error) {
+	w := wallet.Constructor()
+	w.Name = walletName
+
+	walletInstance, err := w.GetWalletInstance()
+	if err != nil {
+		return nil, err
+	}
+
+	if walletInstance.Addresses == nil {
+		return nil, fmt.Errorf("wallet: %s`s addresses are empty", walletName)
+	}
+
+	return walletInstance.Addresses, nil
 }
