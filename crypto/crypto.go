@@ -19,6 +19,7 @@ func getSecretKey() ([]byte, error) {
 	return []byte(secretKey), nil
 }
 
+// EncryptBase64 -> Encryption and 64base encoding
 func EncryptBase64(plaintext []byte) (string, error) {
 	key, err := getSecretKey()
 	if err != nil {
@@ -46,6 +47,7 @@ func EncryptBase64(plaintext []byte) (string, error) {
 	return base64.StdEncoding.EncodeToString(full), nil
 }
 
+// DecryptBase64 -> Decryption and 64base decoding
 func DecryptBase64(key []byte, b64data string) ([]byte, error) {
 	raw, err := base64.StdEncoding.DecodeString(b64data)
 	if err != nil {
