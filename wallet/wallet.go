@@ -9,10 +9,10 @@ import (
 )
 
 type Wallet struct {
-	Name      string    `json:"name"`
-	Mnemonic  string    `json:"mnemonic"`
-	Addresses []Address `json:"addresses"`
-	RawMnemonic []byte
+	Name        string    `json:"name"`
+	Mnemonic    string    `json:"mnemonic"`
+	Addresses   []Address `json:"addresses"`
+	RawMnemonic []byte    `json:"-"`
 }
 
 type Address struct {
