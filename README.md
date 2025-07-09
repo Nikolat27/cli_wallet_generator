@@ -1,3 +1,5 @@
+Please use this project on GNOME ubuntu (due to the keyring)
+
 Install Dependencies:
     `go mod download`
 
