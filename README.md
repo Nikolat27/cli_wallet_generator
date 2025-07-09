@@ -1,23 +1,26 @@
+Install Dependencies:
+    `go mod download`
+
 Run the project:
-make run
+`make run` or `go run cmd/main.go`
 
 Create Wallet:
 wallet create -n <**walletName**>
 `Example:
-    address create -n w1`
+    wallet create -n w1`
 
 Delete Wallet:
 wallet delete -n <**walletName**>
 `Example:
-    address delete -n w1`
+    wallet delete -n w1`
 
 Get Wallet:
 wallet get -n <**walletName**>
 `Example:
-    address get -n w1`
+    wallet get -n w1`
 
 Wallet List:
-wallet list
+`wallet list`
 
 Create Address:
 address create -w <**walletName**> -c <**coinSymbol**>
