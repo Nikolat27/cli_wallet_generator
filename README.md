@@ -1,6 +1,9 @@
 Install Dependencies:
     `go mod download`
 
+Also install this (for clipboard):
+    `sudo apt install xsel`
+
 Run the project:
 `make run` or `go run cmd/main.go`
 

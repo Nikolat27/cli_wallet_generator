@@ -3,9 +3,7 @@ package address
 import (
 	"cli_wallet_generator/crypto"
 	"cli_wallet_generator/wallet"
-	"errors"
 	"fmt"
-	"os"
 	"time"
 )
 
@@ -43,13 +41,8 @@ func loadWalletWithMnemonic(walletName string) (*wallet.Wallet, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	secretKey, err := getSecretKey()
-	if err != nil {
-		return nil, err
-	}
-
-	mnemonic, err := crypto.DecryptBase64([]byte(secretKey), instance.Mnemonic)
+	
+	mnemonic, err := crypto.DecryptBase64(instance.Mnemonic)
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +91,6 @@ func updateWalletChanges(updated *wallet.Wallet) error {
 	}
 
 	return fmt.Errorf("wallet '%s' not found for update", updated.Name)
-}
-
-func getSecretKey() (string, error) {
-	key := os.Getenv("SECRET_KEY")
-	if key == "" {
-		return "", errors.New("SECRET_KEY environment variable is missing")
-	}
-	return key, nil
 }
 
 func RetrieveAddressList(walletName string) ([]wallet.Address, error) {

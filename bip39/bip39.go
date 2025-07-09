@@ -49,7 +49,7 @@ func (w *WalletSeed) SeedString() string {
 }
 
 func (w *WalletSeed) copyToClipboard() error {
-	if err := clipboard.WriteAll(w.SeedString()); err != nil {
+	if err := clipboard.WriteAll(w.MnemonicString()); err != nil {
 		return fmt.Errorf("failed to copy mnemonic to clipboard: %w", err)
 	}
 

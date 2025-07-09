@@ -13,9 +13,13 @@ require (
 )
 
 require (
+	al.essio.dev/pkg/shellescape v1.5.1 // indirect
 	github.com/FactomProject/basen v0.0.0-20150613233007-fe3947df716e // indirect
 	github.com/FactomProject/btcutilecc v0.0.0-20130527213604-d3a63a5752ec // indirect
+	github.com/danieljoos/wincred v1.2.2 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/holiman/uint256 v1.3.2 // indirect
+	github.com/zalando/go-keyring v0.2.6 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 )
