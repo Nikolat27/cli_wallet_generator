@@ -34,10 +34,10 @@ func (w *WalletSeed) Validate() bool {
 	return bip39.IsMnemonicValid(string(w.Mnemonic))
 }
 
-func (w *WalletSeed) GetMnemonic() string {
+func (w *WalletSeed) MnemonicString() string {
 	return string(w.Mnemonic)
 }
 
-func (w *WalletSeed) GetSeed() string {
+func (w *WalletSeed) SeedString() string {
 	return string(w.Seed)
 }

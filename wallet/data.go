@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"slices"
 )
 
 const jsonFilePath = "wallets.json"
@@ -16,15 +15,7 @@ type Wallet struct {
 	Address  string `json:"address"`
 }
 
-func walletExists(wallets []Wallet, name string) bool {
-	for _, wallet := range wallets {
-		if wallet.Name == name {
-			return true
-		}
-	}
-	return false
-}
-
+// loadWallets reads the wallet JSON file
 func loadWallets() ([]Wallet, error) {
 	data, err := os.ReadFile(jsonFilePath)
 	if err != nil {
@@ -42,34 +33,47 @@ func loadWallets() ([]Wallet, error) {
 	if err := json.Unmarshal(data, &wallets); err != nil {
 		return nil, err
 	}
+	
 	return wallets, nil
 }
 
-// saveWallets -> Saves the wallets back to the jsonfile
+// saveWallets writes the wallet list back to the json file
 func saveWallets(wallets []Wallet) error {
-	data, err := json.MarshalIndent(wallets, "", "	")
+	data, err := json.MarshalIndent(wallets, "", "    ")
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(jsonFilePath, data, 0644)
 }
 
-// getWallets -> Public function to get wallets and checking if a name already exists
-func getWallets(walletName string) ([]Wallet, error) {
+func IsWalletExist(wallets []Wallet, name string) bool {
+	return indexOfWallet(wallets, name) != -1
+}
+
+func indexOfWallet(wallets []Wallet, name string) int {
+	for i, wallet := range wallets {
+		if wallet.Name == name {
+			return i
+		}
+	}
+	return -1
+}
+
+func findWalletByName(name string) (*Wallet, error) {
 	wallets, err := loadWallets()
 	if err != nil {
 		return nil, err
 	}
 
-	if walletExists(wallets, walletName) {
-		return nil, fmt.Errorf("ERROR: wallet name '%s' already exists", walletName)
+	for _, wallet := range wallets {
+		if wallet.Name == name {
+			return &wallet, nil
+		}
 	}
-
-	return wallets, nil
+	return nil, fmt.Errorf("wallet '%s' not found", name)
 }
 
-// AddWallet -> Adds a new wallet and saves it to the json file
-func AddWallet(wallets []Wallet, name, encryptedMnemonic, address string) error {
+func addWallet(wallets []Wallet, name, encryptedMnemonic, address string) error {
 	wallets = append(wallets, Wallet{
 		Name:     name,
 		Mnemonic: encryptedMnemonic,
@@ -80,50 +84,6 @@ func AddWallet(wallets []Wallet, name, encryptedMnemonic, address string) error 
 		return err
 	}
 
-	fmt.Println("Wallet Added Successfully")
-	return nil
-}
-
-func getWallet(walletName string) (*Wallet, error) {
-	wallets, err := loadWallets()
-	if err != nil {
-		return nil, err
-	}
-
-	if !walletExists(wallets, walletName) {
-		return nil, fmt.Errorf("ERROR: wallet name '%s' does not exists", walletName)
-	}
-
-	for _, wallet := range wallets {
-		if wallet.Name == walletName {
-			return &wallet, nil
-		}
-	}
-
-	return nil, nil
-}
-
-func deleteWallet(walletName string) error {
-	wallets, err := loadWallets()
-	if err != nil {
-		return err
-	}
-
-	if !walletExists(wallets, walletName) {
-		return fmt.Errorf("ERROR: wallet name '%s' does not exists", walletName)
-	}
-
-	for idx, wallet := range wallets {
-		if wallet.Name == walletName {
-			wallets = slices.Delete(wallets, idx, idx+1)
-			break
-		}
-	}
-
-	if err := saveWallets(wallets); err != nil {
-		return err
-	}
-	
-	fmt.Printf("Wallet: %s deleted successfully \n", walletName)
+	fmt.Println("Wallet added successfully ✅  ")
 	return nil
 }
