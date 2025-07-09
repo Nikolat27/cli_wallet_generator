@@ -5,6 +5,7 @@ import (
 	"cli_wallet_generator/crypto"
 	"fmt"
 	"slices"
+	"time"
 )
 
 type Wallet struct {
@@ -13,15 +14,25 @@ type Wallet struct {
 	Addresses []Address `json:"addresses"`
 }
 
+type Address struct {
+	Coin      string    `json:"coin"`
+	Address   []byte    `json:"address"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func Constructor() *Wallet {
+	return &Wallet{}
+}
+
 // CreateWallet generates a new wallet, encrypts the mnemonic, and saves it
-func CreateWallet(walletName string) error {
+func (w *Wallet) CreateWallet() error {
 	wallets, err := LoadWallets()
 	if err != nil {
 		return fmt.Errorf("failed to load wallets: %w", err)
 	}
 
-	if exists := IsWalletExist(wallets, walletName); exists {
-		return fmt.Errorf("this wallet name '%s' already exists (must be unique)", walletName)
+	if exists := IsWalletExist(wallets, w.Name); exists {
+		return fmt.Errorf("this wallet name '%s' already exists (must be unique)", w.Name)
 	}
 
 	seed, err := bip39.InitWallet()
@@ -29,23 +40,19 @@ func CreateWallet(walletName string) error {
 		return fmt.Errorf("failed to generate seed: %w", err)
 	}
 
-	if err := seed.CopyToClipboard(); err != nil {
-		return err
-	}
-
 	encryptedMnemonic, err := crypto.EncryptBase64(seed.Mnemonic)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt mnemonic: %w", err)
 	}
 
-	if err := addWallet(wallets, walletName, encryptedMnemonic, nil); err != nil {
+	if err := addWallet(wallets, w.Name, encryptedMnemonic, nil); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func ListWallets() ([]Wallet, error) {
+func (w *Wallet) ListWallets() ([]Wallet, error) {
 	wallets, err := LoadWallets()
 	if err != nil {
 		return nil, fmt.Errorf("loading wallets failed: %w", err)
@@ -54,8 +61,8 @@ func ListWallets() ([]Wallet, error) {
 	return wallets, nil
 }
 
-func GetWalletInstance(walletName string) (*Wallet, error) {
-	wallet, err := findWalletByName(walletName)
+func (w *Wallet) GetWalletInstance() (*Wallet, error) {
+	wallet, err := findWalletByName(w.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -63,15 +70,15 @@ func GetWalletInstance(walletName string) (*Wallet, error) {
 	return wallet, nil
 }
 
-func DeleteWallet(walletName string) error {
+func (w *Wallet) DeleteWallet() error {
 	wallets, err := LoadWallets()
 	if err != nil {
 		return fmt.Errorf("failed to load wallets: %w", err)
 	}
 
-	idx := indexOfWallet(wallets, walletName)
+	idx := indexOfWallet(wallets, w.Name)
 	if idx == -1 {
-		return fmt.Errorf("wallet '%s' does not exist", walletName)
+		return fmt.Errorf("wallet '%s' does not exist", w.Name)
 	}
 
 	wallets = slices.Delete(wallets, idx, idx+1)
@@ -80,7 +87,7 @@ func DeleteWallet(walletName string) error {
 		return fmt.Errorf("failed to save wallets after deletion: %w", err)
 	}
 
-	fmt.Printf("Wallet '%s' deleted successfully ✅\n", walletName)
+	fmt.Printf("Wallet '%s' deleted successfully ✅\n", w.Name)
 	return nil
 }
 
