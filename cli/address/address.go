@@ -39,12 +39,14 @@ func handleCreate(inputs []string) error {
 	walletName := inputs[3]
 	coinName := inputs[5]
 
-	_, err := address.GenerateAndStoreAddress(walletName, coinName)
+	newAddress, err := address.GenerateAndStoreAddress(walletName, coinName)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("%s address created successfully! ✅ \n", coinName)
+	fmt.Printf("New Address: %s\n", newAddress.Address)
+	
 	return nil
 }
 
