@@ -7,10 +7,12 @@ import (
 	"os"
 )
 
-const jsonFilePath = "wallets.json"
+const (
+	jsonFilePath = "wallets.json"
+)
 
-// loadWallets reads the wallet JSON file
-func loadWallets() ([]Wallet, error) {
+// LoadWallets reads the wallet JSON file
+func LoadWallets() ([]Wallet, error) {
 	data, err := os.ReadFile(jsonFilePath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -31,8 +33,8 @@ func loadWallets() ([]Wallet, error) {
 	return wallets, nil
 }
 
-// saveWallets writes the wallet list back to the json file
-func saveWallets(wallets []Wallet) error {
+// SaveWallets writes the wallet list back to the json file
+func SaveWallets(wallets []Wallet) error {
 	data, err := json.MarshalIndent(wallets, "", "    ")
 	if err != nil {
 		return err
@@ -54,7 +56,7 @@ func indexOfWallet(wallets []Wallet, name string) int {
 }
 
 func findWalletByName(name string) (*Wallet, error) {
-	wallets, err := loadWallets()
+	wallets, err := LoadWallets()
 	if err != nil {
 		return nil, err
 	}
@@ -67,14 +69,14 @@ func findWalletByName(name string) (*Wallet, error) {
 	return nil, fmt.Errorf("wallet '%s' not found", name)
 }
 
-func addWallet(wallets []Wallet, name, encryptedMnemonic, address string) error {
+func addWallet(wallets []Wallet, name, encryptedMnemonic string, addresses []Address) error {
 	wallets = append(wallets, Wallet{
-		Name:     name,
-		Mnemonic: encryptedMnemonic,
-		Address:  address,
+		Name:      name,
+		Mnemonic:  encryptedMnemonic,
+		Addresses: addresses,
 	})
 
-	if err := saveWallets(wallets); err != nil {
+	if err := SaveWallets(wallets); err != nil {
 		return err
 	}
 

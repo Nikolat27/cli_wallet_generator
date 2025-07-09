@@ -1,4 +1,4 @@
-package wallet
+package crypto
 
 import (
 	"crypto/aes"
