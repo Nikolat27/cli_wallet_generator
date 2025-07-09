@@ -19,7 +19,12 @@ type Ethereum struct {
 	RawMnemonic []byte
 }
 
-func (e *Ethereum) GenerateEthereumAddress(account uint32) ([]byte, error) {
+func GenerateEthereumAddress(mnemonic []byte, accountIndex uint32) ([]byte, error) {
+	eth := &Ethereum{RawMnemonic: mnemonic}
+	return eth.generateAddress(accountIndex)
+}
+
+func (e *Ethereum) generateAddress(account uint32) ([]byte, error) {
 	seed := bip39.NewSeed(string(e.RawMnemonic), "")
 
 	masterKey, err := bip32.NewMasterKey(seed)
