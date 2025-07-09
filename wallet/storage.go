@@ -9,12 +9,6 @@ import (
 
 const jsonFilePath = "wallets.json"
 
-type Wallet struct {
-	Name     string `json:"name"`
-	Mnemonic string `json:"mnemonic"`
-	Address  string `json:"address"`
-}
-
 // loadWallets reads the wallet JSON file
 func loadWallets() ([]Wallet, error) {
 	data, err := os.ReadFile(jsonFilePath)
@@ -33,7 +27,7 @@ func loadWallets() ([]Wallet, error) {
 	if err := json.Unmarshal(data, &wallets); err != nil {
 		return nil, err
 	}
-	
+
 	return wallets, nil
 }
 
