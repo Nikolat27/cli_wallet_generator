@@ -69,6 +69,6 @@ func DeleteWallet(walletName string) error {
 	if err := deleteWallet(walletName); err != nil {
 		fmt.Errorf("ERROR deleting wallet: %s", err)
 	}
-	
+
 	return nil
 }

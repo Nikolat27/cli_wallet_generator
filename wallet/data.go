@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 )
 
 const jsonFilePath = "wallets.json"
@@ -113,8 +114,16 @@ func deleteWallet(walletName string) error {
 	}
 
 	for idx, wallet := range wallets {
-		fmt.Println(idx, wallet)
+		if wallet.Name == walletName {
+			wallets = slices.Delete(wallets, idx, idx+1)
+			break
+		}
+	}
+
+	if err := saveWallets(wallets); err != nil {
+		return err
 	}
 	
+	fmt.Printf("Wallet: %s deleted successfully \n", walletName)
 	return nil
 }
