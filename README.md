@@ -12,7 +12,7 @@ Run the project:
 Create Wallet:
 wallet create -n <**walletName**>
 `Example:
-    wallet create -n w1`
+    `wallet create -n w1
 
 Delete Wallet:
 wallet delete -n <**walletName**>
