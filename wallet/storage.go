@@ -9,8 +9,6 @@ import (
 
 const (
 	JsonFilePath = "wallets.json"
-	JsonIndent   = "    "
-	JsonPrefix
 )
 
 // LoadFromDisk -> reads the wallet JSON file
@@ -37,7 +35,7 @@ func LoadFromDisk() ([]Wallet, error) {
 
 // SaveToDisk -> writes the wallet list back to the json file
 func SaveToDisk(wallets []Wallet) error {
-	data, err := json.MarshalIndent(wallets, JsonPrefix, JsonIndent)
+	data, err := json.MarshalIndent(wallets, "", "\t")
 	if err != nil {
 		return fmt.Errorf("ERROR json marshaling the data: %s", err)
 	}

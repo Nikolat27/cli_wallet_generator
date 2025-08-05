@@ -7,8 +7,10 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/zalando/go-keyring"
 	"io"
+	"os"
+
+	"github.com/zalando/go-keyring"
 )
 
 const (
@@ -18,6 +20,7 @@ const (
 )
 
 func getOrCreateSecretKey() ([]byte, error) {
+	// Try keyring first
 	storedKey, err := keyring.Get(keyringService, keyringUser)
 	if err == nil {
 		// Key exists, decode and return
@@ -25,12 +28,14 @@ func getOrCreateSecretKey() ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to decode stored key: %w", err)
 		}
-		
+
 		return keyBytes, nil
 	}
 
+	// If keyring fails, try file-based fallback
 	if !errors.Is(err, keyring.ErrNotFound) {
-		return nil, fmt.Errorf("keyring get error: %w", err)
+		fmt.Println("⚠️  Keyring unavailable, using file-based encryption ⚠️")
+		return getOrCreateSecretKeyFromFile()
 	}
 
 	// generate a new random key
@@ -39,10 +44,38 @@ func getOrCreateSecretKey() ([]byte, error) {
 		return nil, fmt.Errorf("failed to generate random key: %w", err)
 	}
 
-	// base64 encoded
+	// Try keyring first, fallback to file
 	keyEncoded := base64.StdEncoding.EncodeToString(key)
 	if err := keyring.Set(keyringService, keyringUser, keyEncoded); err != nil {
-		return nil, fmt.Errorf("failed to set key in keyring: %w", err)
+		fmt.Println("⚠️  Keyring unavailable, using file-based encryption ⚠️")
+		return getOrCreateSecretKeyFromFile()
+	}
+
+	return key, nil
+}
+
+func getOrCreateSecretKeyFromFile() ([]byte, error) {
+	keyFile := ".wallet_secret.key"
+
+	// Try to read existing key
+	if data, err := os.ReadFile(keyFile); err == nil {
+		keyBytes, err := base64.StdEncoding.DecodeString(string(data))
+		if err != nil {
+			return nil, fmt.Errorf("failed to decode stored key: %w", err)
+		}
+		return keyBytes, nil
+	}
+
+	// Generate new key
+	key := make([]byte, keySize)
+	if _, err := rand.Read(key); err != nil {
+		return nil, fmt.Errorf("failed to generate random key: %w", err)
+	}
+
+	// Save to file
+	keyEncoded := base64.StdEncoding.EncodeToString(key)
+	if err := os.WriteFile(keyFile, []byte(keyEncoded), 0600); err != nil {
+		return nil, fmt.Errorf("failed to save key to file: %w", err)
 	}
 
 	return key, nil

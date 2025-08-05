@@ -1,9 +1,9 @@
 package wallet
 
 import (
-	"cli_wallet_generator/wallet"
 	"errors"
 	"fmt"
+	"go_wallet_generator/wallet"
 )
 
 const (
@@ -49,6 +49,15 @@ func (c *Commands) create(inputs []string) error {
 		return err
 	}
 
+	// Show mnemonic only once
+	fmt.Println("⚠️  YOUR 12-WORD MNEMONIC (SAVE THIS SAFELY - YOU WON'T SEE IT AGAIN): ⚠️")
+	fmt.Println("⚠️  " + string(c.Wallet.RawMnemonic) + " ⚠️")
+	fmt.Println("⚠️  Copy it manually and keep it safe! ⚠️")
+	fmt.Println("⚠️  This is your ONLY chance to see this mnemonic! ⚠️")
+
+	// Clear the raw mnemonic from memory
+	c.Wallet.ClearRawMnemonic()
+
 	fmt.Println("Wallet added successfully ✅  ")
 	return nil
 }
@@ -66,7 +75,13 @@ func (c *Commands) get(inputs []string) error {
 		return err
 	}
 
-	fmt.Printf("Wallet: %+v\n", *w)
+	fmt.Printf("Wallet: %s\n", w.Name)
+	fmt.Printf("Created: %s\n", w.CreatedAt.Format("2006-01-02 15:04:05"))
+	fmt.Printf("Addresses: %d\n", len(w.Addresses))
+
+	// Don't show the mnemonic for security
+	fmt.Println("⚠️  Mnemonic is encrypted and not displayed for security ⚠️")
+
 	return nil
 }
 
