@@ -1,109 +1,261 @@
-<!DOCTYPE html>
+package app
+
+// EmbeddedHTML contains the complete HTML content for the wallet generator frontend
+const EmbeddedHTML = `<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Cryptocurrency Wallet Generator</title>
+        <title>SamWallet</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #f5f5f5;
-            }
-            .container {
-                display: flex;
-                gap: 20px;
-            }
-            .panel {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                flex: 1;
-            }
-            .title {
-                text-align: center;
-                color: #333;
-                margin-bottom: 30px;
-                font-size: 24px;
-                font-weight: bold;
-            }
-            .section {
-                margin-bottom: 20px;
-            }
-            .section h3 {
-                margin-top: 0;
-                color: #555;
-            }
-            input,
-            select,
-            button {
-                width: 100%;
-                padding: 10px;
-                margin: 5px 0;
-                border: 1px solid #ddd;
-                border-radius: 4px;
+            * {
+                margin: 0;
+                padding: 0;
                 box-sizing: border-box;
             }
-            button {
-                background-color: #007bff;
-                color: white;
-                border: none;
-                cursor: pointer;
-                font-size: 14px;
-            }
-            button:hover {
-                background-color: #0056b3;
-            }
-            button.delete {
-                background-color: #dc3545;
-            }
-            button.delete:hover {
-                background-color: #c82333;
-            }
-            .list {
-                max-height: 300px;
-                overflow-y: auto;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 10px;
-            }
-            .list-item {
-                padding: 8px;
-                border-bottom: 1px solid #eee;
-                cursor: pointer;
-            }
-            .list-item:hover {
-                background-color: #f8f9fa;
-            }
-            .list-item.selected {
-                background-color: #e3f2fd;
-            }
-            .status {
-                text-align: center;
-                padding: 10px;
-                margin-top: 20px;
-                border-radius: 4px;
-            }
-            .status.success {
-                background-color: #d4edda;
-                color: #155724;
-                border: 1px solid #c3e6cb;
-            }
-            .status.error {
-                background-color: #f8d7da;
-                color: #721c24;
-                border: 1px solid #f5c6cb;
-            }
-            .status.info {
-                background-color: #d1ecf1;
-                color: #0c5460;
-                border: 1px solid #bee5eb;
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                color: #333;
             }
 
-            /* Modal Styles */
+            .container {
+                display: flex;
+                gap: 24px;
+                margin-top: 20px;
+            }
+
+            .panel {
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                padding: 32px;
+                border-radius: 20px;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+                flex: 1;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                transition: all 0.3s ease;
+            }
+
+            .panel:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            }
+
+            .title {
+                text-align: center;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 40px;
+                font-size: 32px;
+                font-weight: 700;
+                letter-spacing: -1px;
+            }
+
+            .section {
+                margin-bottom: 28px;
+            }
+
+            .section h3 {
+                margin-top: 0;
+                margin-bottom: 16px;
+                color: #2c3e50;
+                font-size: 18px;
+                font-weight: 600;
+                position: relative;
+                padding-bottom: 8px;
+            }
+
+            .section h3::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 40px;
+                height: 3px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                border-radius: 2px;
+            }
+
+            input,
+            select {
+                width: 100%;
+                padding: 14px 16px;
+                margin: 8px 0;
+                border: 2px solid #e1e8ed;
+                border-radius: 12px;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                background: rgba(255, 255, 255, 0.8);
+            }
+
+            input:focus,
+            select:focus {
+                outline: none;
+                border-color: #667eea;
+                background: white;
+                box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+                transform: translateY(-1px);
+            }
+
+            button {
+                width: 100%;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            }
+
+            button::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
+                );
+                transition: left 0.5s;
+            }
+
+            button:hover::before {
+                left: 100%;
+            }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+            }
+
+            button:active {
+                transform: translateY(0);
+            }
+
+            button.delete {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+                box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+            }
+
+            button.delete:hover {
+                box-shadow: 0 12px 30px rgba(255, 107, 107, 0.4);
+            }
+            .list {
+                max-height: 320px;
+                overflow-y: auto;
+                border: 2px solid #e1e8ed;
+                border-radius: 16px;
+                padding: 8px;
+                background: rgba(255, 255, 255, 0.5);
+                backdrop-filter: blur(5px);
+            }
+
+            .list::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .list::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 3px;
+            }
+
+            .list::-webkit-scrollbar-thumb {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                border-radius: 3px;
+            }
+
+            .list-item {
+                padding: 14px 16px;
+                margin: 4px 0;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: relative;
+                border: 1px solid transparent;
+                font-weight: 500;
+            }
+
+            .list-item:hover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(102, 126, 234, 0.1),
+                    rgba(118, 75, 162, 0.1)
+                );
+                border-color: rgba(102, 126, 234, 0.3);
+                transform: translateX(4px);
+            }
+
+            .list-item.selected {
+                background: linear-gradient(
+                    135deg,
+                    rgba(102, 126, 234, 0.15),
+                    rgba(118, 75, 162, 0.15)
+                );
+                border-color: #667eea;
+                color: #2c3e50;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            }
+
+            .status {
+                text-align: center;
+                padding: 16px 20px;
+                margin-top: 24px;
+                border-radius: 16px;
+                font-weight: 600;
+                position: relative;
+                overflow: hidden;
+                border: none;
+            }
+
+            .status::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: currentColor;
+                opacity: 0.3;
+            }
+
+            .status.success {
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            }
+
+            .status.error {
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: white;
+                box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+            }
+
+            .status.info {
+                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                color: white;
+                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            }
+
+            /* Modern Modal Styles */
             .modal {
                 display: none;
                 position: fixed;
@@ -112,31 +264,77 @@
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(8px);
+                animation: modalFadeIn 0.3s ease;
+            }
+
+            @keyframes modalFadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes modalSlideIn {
+                from {
+                    transform: translateY(-50px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
             }
 
             .modal-content {
-                background-color: #fefefe;
-                margin: 5% auto;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                margin: 3% auto;
                 padding: 0;
-                border-radius: 8px;
-                width: 80%;
-                max-width: 600px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                width: 90%;
+                max-width: 650px;
+                border-radius: 24px;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+                position: relative;
+                animation: modalSlideIn 0.4s ease;
+                overflow: hidden;
             }
 
             .modal-header {
-                background-color: #007bff;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
-                padding: 15px 20px;
-                border-radius: 8px 8px 0 0;
+                padding: 24px 32px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                position: relative;
+            }
+
+            .modal-header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    transparent 100%
+                );
             }
 
             .modal-header h3 {
                 margin: 0;
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+                position: relative;
+                z-index: 1;
             }
 
             .close {
@@ -144,38 +342,76 @@
                 font-size: 28px;
                 font-weight: bold;
                 cursor: pointer;
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                padding: 8px 12px;
+                width: auto;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+                position: relative;
+                z-index: 1;
             }
 
             .close:hover {
-                color: #ddd;
+                background: rgba(255, 255, 255, 0.2);
+                transform: rotate(90deg);
             }
 
             .modal-body {
-                padding: 20px;
+                padding: 32px;
             }
 
             .modal-footer {
-                padding: 15px 20px;
-                background-color: #f8f9fa;
-                border-radius: 0 0 8px 8px;
+                padding: 24px 32px;
+                background: rgba(0, 0, 0, 0.02);
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
                 text-align: right;
             }
 
             .warning {
-                color: #dc3545;
-                font-weight: bold;
-                background-color: #f8d7da;
-                padding: 10px;
-                border-radius: 4px;
-                border: 1px solid #f5c6cb;
+                color: white;
+                font-weight: 600;
+                background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+                border: none;
+                padding: 16px 20px;
+                border-radius: 16px;
+                margin: 16px 0;
+                box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .warning::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
             }
 
             .info {
-                color: #155724;
-                background-color: #d4edda;
-                padding: 10px;
-                border-radius: 4px;
-                border: 1px solid #c3e6cb;
+                color: white;
+                font-weight: 600;
+                background: linear-gradient(135deg, #10b981, #059669);
+                border: none;
+                padding: 16px 20px;
+                border-radius: 16px;
+                margin: 16px 0;
+                box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .info::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
             }
 
             /* Mnemonic container styles */
@@ -185,45 +421,135 @@
 
             .mnemonic-input-group {
                 position: relative;
-                display: flex;
-                align-items: flex-start;
+                display: block;
             }
 
             .mnemonic-input-group textarea {
-                flex: 1;
-                margin-right: 10px;
+                width: 100%;
+                padding-right: 50px !important;
+                box-sizing: border-box;
+                resize: vertical;
+                min-height: 80px;
+                max-width: 100%;
             }
 
             .eye-button {
                 position: absolute;
-                right: 10px;
-                bottom: 10px;
-                background: none;
-                border: none;
-                font-size: 18px;
+                right: 12px;
+                top: 12px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border: 2px solid rgba(102, 126, 234, 0.2);
+                font-size: 16px;
                 cursor: pointer;
-                padding: 5px;
-                border-radius: 4px;
-                transition: background-color 0.2s;
+                padding: 8px 10px;
+                border-radius: 12px;
+                transition: all 0.3s ease;
+                z-index: 10;
+                width: auto;
+                height: auto;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
 
             .eye-button:hover {
-                background-color: rgba(0, 123, 255, 0.1);
+                background: linear-gradient(
+                    135deg,
+                    rgba(102, 126, 234, 0.1),
+                    rgba(118, 75, 162, 0.1)
+                );
+                border-color: #667eea;
+                transform: scale(1.05);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
             }
 
             .mnemonic-hidden {
                 -webkit-text-security: disc;
                 text-security: disc;
             }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .container {
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
+                .panel {
+                    padding: 24px;
+                    border-radius: 16px;
+                }
+
+                .title {
+                    font-size: 28px;
+                    margin-bottom: 32px;
+                }
+
+                .modal-content {
+                    width: 95%;
+                    margin: 5% auto;
+                }
+
+                .modal-body {
+                    padding: 24px;
+                }
+
+                .modal-header {
+                    padding: 20px 24px;
+                }
+
+                .modal-footer {
+                    padding: 20px 24px;
+                }
+            }
+
+            /* Loading animations */
+            @keyframes pulse {
+                0% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.5;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            .loading {
+                animation: pulse 1.5s infinite;
+            }
+
+            /* Scroll animations */
+            @keyframes slideInUp {
+                from {
+                    transform: translateY(30px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .animate-in {
+                animation: slideInUp 0.6s ease forwards;
+            }
+
+            .title h4 {
+                color: white !important;
+                -webkit-text-fill-color: white;
+            }
         </style>
     </head>
     <body>
-        <div class="title">Cryptocurrency Wallet Generator</div>
+        <div class="title">
+            <h4>SamWallet - Crypto Wallet Generator (BTC & ETH)</h4>
+        </div>
 
         <div class="container">
-            <div class="panel">
+            <div class="panel animate-in">
                 <div class="section">
-                    <h3>Create New Wallet</h3>
+                    <h3>🔐 Create New Wallet</h3>
                     <input
                         type="text"
                         id="walletName"
@@ -233,7 +559,7 @@
                 </div>
 
                 <div class="section">
-                    <h3>Existing Wallets</h3>
+                    <h3>💼 Existing Wallets</h3>
                     <div id="walletList" class="list"></div>
                     <button class="delete" onclick="deleteWallet()">
                         Delete Selected Wallet
@@ -241,9 +567,9 @@
                 </div>
             </div>
 
-            <div class="panel">
+            <div class="panel animate-in">
                 <div class="section">
-                    <h3>Generate Addresses</h3>
+                    <h3>🚀 Generate Addresses</h3>
                     <select id="coinSelect">
                         <option value="btc">Bitcoin (BTC)</option>
                         <option value="eth">Ethereum (ETH)</option>
@@ -254,7 +580,7 @@
                 </div>
 
                 <div class="section">
-                    <h3>Wallet Addresses</h3>
+                    <h3>📍 Wallet Addresses</h3>
                     <div id="addressList" class="list"></div>
                 </div>
             </div>
@@ -293,7 +619,6 @@
                                 readonly
                                 rows="3"
                                 style="
-                                    width: 100%;
                                     font-family: monospace;
                                     font-size: 14px;
                                     padding: 10px;
@@ -689,4 +1014,4 @@
             }
         </script>
     </body>
-</html>
+</html>`
