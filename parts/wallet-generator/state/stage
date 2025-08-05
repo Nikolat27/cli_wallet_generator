@@ -1,0 +1,183 @@
+backstage_directories: !!set {}
+backstage_files: !!set {}
+directories: !!set
+  bin: null
+  etc: null
+  etc/X11: null
+  etc/X11/Xsession.d: null
+  etc/dbus-1: null
+  etc/dbus-1/session.d: null
+  usr: null
+  usr/bin: null
+  usr/lib: null
+  usr/lib/systemd: null
+  usr/lib/systemd/user: null
+  usr/lib/systemd/user/sockets.target.wants: null
+  usr/lib/tmpfiles.d: null
+  usr/lib/x86_64-linux-gnu: null
+  usr/lib/x86_64-linux-gnu/gio: null
+  usr/lib/x86_64-linux-gnu/gio/modules: null
+  usr/lib/x86_64-linux-gnu/glib-2.0: null
+  usr/share: null
+  usr/share/dbus-1: null
+  usr/share/dbus-1/services: null
+  usr/share/doc: null
+  usr/share/doc/dbus-bin: null
+  usr/share/doc/dbus-daemon: null
+  usr/share/doc/dbus-session-bus-common: null
+  usr/share/doc/dbus-user-session: null
+  usr/share/doc/libdbus-1-3: null
+  usr/share/doc/libglib2.0-0t64: null
+  usr/share/doc/libsecret-1-0: null
+  usr/share/doc/libsecret-common: null
+  usr/share/glib-2.0: null
+  usr/share/glib-2.0/schemas: null
+  usr/share/lintian: null
+  usr/share/lintian/overrides: null
+  usr/share/man: null
+  usr/share/man/man1: null
+files: !!set
+  bin/wallet-generator-cli: null
+  bin/wallet-generator-web: null
+  etc/X11/Xsession.d/20dbus_xdg-runtime: null
+  usr/bin/dbus-cleanup-sockets: null
+  usr/bin/dbus-daemon: null
+  usr/bin/dbus-monitor: null
+  usr/bin/dbus-run-session: null
+  usr/bin/dbus-send: null
+  usr/bin/dbus-update-activation-environment: null
+  usr/bin/dbus-uuidgen: null
+  usr/lib/systemd/user/dbus.service: null
+  usr/lib/systemd/user/dbus.socket: null
+  usr/lib/systemd/user/sockets.target.wants/dbus.socket: null
+  usr/lib/tmpfiles.d/dbus.conf: null
+  usr/lib/x86_64-linux-gnu/glib-2.0/gio-launch-desktop: null
+  usr/lib/x86_64-linux-gnu/glib-2.0/gio-querymodules: null
+  usr/lib/x86_64-linux-gnu/glib-2.0/glib-compile-schemas: null
+  usr/lib/x86_64-linux-gnu/libdbus-1.so.3: null
+  usr/lib/x86_64-linux-gnu/libdbus-1.so.3.32.4: null
+  usr/lib/x86_64-linux-gnu/libgio-2.0.so.0: null
+  usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.8000.0: null
+  usr/lib/x86_64-linux-gnu/libglib-2.0.so.0: null
+  usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.8000.0: null
+  usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0: null
+  usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.8000.0: null
+  usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0: null
+  usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.8000.0: null
+  usr/lib/x86_64-linux-gnu/libgthread-2.0.so.0: null
+  usr/lib/x86_64-linux-gnu/libgthread-2.0.so.0.8000.0: null
+  usr/lib/x86_64-linux-gnu/libsecret-1.so.0: null
+  usr/lib/x86_64-linux-gnu/libsecret-1.so.0.0.0: null
+  usr/share/dbus-1/session.conf: null
+  usr/share/doc/dbus-bin/AUTHORS.gz: null
+  usr/share/doc/dbus-bin/NEWS.gz: null
+  usr/share/doc/dbus-bin/README.gz: null
+  usr/share/doc/dbus-bin/changelog.Debian.gz: null
+  usr/share/doc/dbus-bin/copyright: null
+  usr/share/doc/dbus-daemon/AUTHORS.gz: null
+  usr/share/doc/dbus-daemon/NEWS.gz: null
+  usr/share/doc/dbus-daemon/README.gz: null
+  usr/share/doc/dbus-daemon/changelog.Debian.gz: null
+  usr/share/doc/dbus-daemon/copyright: null
+  usr/share/doc/dbus-session-bus-common/AUTHORS.gz: null
+  usr/share/doc/dbus-session-bus-common/NEWS.gz: null
+  usr/share/doc/dbus-session-bus-common/README.gz: null
+  usr/share/doc/dbus-session-bus-common/changelog.Debian.gz: null
+  usr/share/doc/dbus-session-bus-common/copyright: null
+  usr/share/doc/dbus-user-session/AUTHORS.gz: null
+  usr/share/doc/dbus-user-session/NEWS.gz: null
+  usr/share/doc/dbus-user-session/README.gz: null
+  usr/share/doc/dbus-user-session/changelog.Debian.gz: null
+  usr/share/doc/dbus-user-session/copyright: null
+  usr/share/doc/libdbus-1-3/AUTHORS.gz: null
+  usr/share/doc/libdbus-1-3/NEWS.gz: null
+  usr/share/doc/libdbus-1-3/README.gz: null
+  usr/share/doc/libdbus-1-3/changelog.Debian.gz: null
+  usr/share/doc/libdbus-1-3/copyright: null
+  usr/share/doc/libglib2.0-0t64/NEWS.gz: null
+  usr/share/doc/libglib2.0-0t64/README.Debian: null
+  usr/share/doc/libglib2.0-0t64/README.md: null
+  usr/share/doc/libglib2.0-0t64/changelog.Debian.gz: null
+  usr/share/doc/libglib2.0-0t64/copyright: null
+  usr/share/doc/libsecret-1-0/changelog.Debian.gz: null
+  usr/share/doc/libsecret-1-0/copyright: null
+  usr/share/doc/libsecret-common/changelog.Debian.gz: null
+  usr/share/doc/libsecret-common/copyright: null
+  usr/share/lintian/overrides/dbus-session-bus-common: null
+  usr/share/lintian/overrides/dbus-user-session: null
+  usr/share/lintian/overrides/libglib2.0-0t64: null
+  usr/share/man/man1/dbus-cleanup-sockets.1.gz: null
+  usr/share/man/man1/dbus-daemon.1.gz: null
+  usr/share/man/man1/dbus-monitor.1.gz: null
+  usr/share/man/man1/dbus-run-session.1.gz: null
+  usr/share/man/man1/dbus-send.1.gz: null
+  usr/share/man/man1/dbus-update-activation-environment.1.gz: null
+  usr/share/man/man1/dbus-uuidgen.1.gz: null
+overlay_hash: 6554e32fa718d54160d0511b36f81458e4cb2357
+part_properties:
+  after: []
+  build-attributes: []
+  build-environment: []
+  build-packages:
+  - gcc
+  - pkg-config
+  - libdbus-1-dev
+  - libsecret-1-dev
+  build-snaps:
+  - go/1.21/stable
+  disable-parallel: false
+  go-buildtags: []
+  go-generate: []
+  organize: {}
+  overlay:
+  - '*'
+  overlay-packages: []
+  overlay-script: null
+  override-build: '# Build CLI version
+
+    go build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-cli ./cmd/main.go
+
+
+    # Build Web GUI version (now with embedded HTML, no static files needed)
+
+    go build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-web ./frontend/main.go
+
+    '
+  override-prime: null
+  override-pull: null
+  override-stage: null
+  permissions: []
+  plugin: go
+  prime:
+  - '*'
+  source: .
+  source-branch: ''
+  source-channel: null
+  source-checksum: ''
+  source-commit: ''
+  source-depth: 0
+  source-subdir: ''
+  source-submodules: null
+  source-tag: ''
+  source-type: ''
+  stage:
+  - '*'
+  stage-packages:
+  - libdbus-1-3
+  - libsecret-1-0
+  - dbus-user-session
+  stage-snaps: []
+partition: default
+partitions_contents: {}
+project_options:
+  application_name: snapcraft
+  arch_triplet: x86_64-linux-gnu
+  project_vars:
+    grade:
+      updated: false
+      value: stable
+    version:
+      updated: false
+      value: 1.1.0
+  project_vars_part_name: null
+  target_arch: amd64

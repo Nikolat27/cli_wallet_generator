@@ -1,0 +1,84 @@
+name: samwallet
+version: "1.1.0"
+summary: Cryptocurrency wallet generator with CLI and Web GUI
+description: |
+    A tool for generating and managing Bitcoin and Ethereum wallets.
+    Supports both command-line and web-based interfaces.
+    Implements BIP39 and BIP44 standards for mnemonic seed generation.
+    Wallet data is stored locally in an encrypted JSON file,
+    with the encryption key securely saved in the GNOME Keyring.
+
+    Features:
+    - Wallet Management: Create, list, get, and delete wallets
+    - Address Generation: Generate Bitcoin and Ethereum addresses from wallets
+    - Secure Storage: Encrypted mnemonic storage using GNOME keyring
+    - BIP39 Compliance: Standard mnemonic phrase generation
+    - Dual Interface: Both CLI and Web-based GUI for different user preferences
+    - Interactive CLI: User-friendly command-line interface for power users
+    - Modern Web GUI: Beautiful web interface for desktop users
+
+grade: stable
+confinement: strict
+
+architectures:
+    - amd64
+    - arm64
+
+base: core22
+
+# Custom plugs for GNOME keyring access
+plugs:
+    gnome-keyring:
+        interface: dbus
+        bus: session
+        name: org.freedesktop.secrets
+
+apps:
+    cli:
+        command: bin/wallet-generator-cli
+        plugs:
+            - gnome-keyring
+            - desktop
+            - desktop-legacy
+            - home
+            - network
+        environment:
+            HOME: $SNAP_USER_DATA
+
+    web:
+        command: bin/wallet-generator-web
+        plugs:
+            - gnome-keyring
+            - desktop
+            - desktop-legacy
+            - wayland
+            - x11
+            - unity7
+            - browser-support
+            - network
+            - network-bind
+            - home
+        environment:
+            HOME: $SNAP_USER_DATA
+
+parts:
+    wallet-generator:
+        plugin: go
+        source: .
+        build-snaps:
+            - go/1.21/stable
+        build-packages:
+            - gcc
+            - pkg-config
+            - libdbus-1-dev
+            - libsecret-1-dev
+        stage-packages:
+            - libdbus-1-3
+            - libsecret-1-0
+            - dbus-user-session
+        override-build: |
+            # Build CLI version
+            go build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-cli ./cmd/main.go
+
+            # Build Web GUI version (now with embedded HTML, no static files needed)
+            go build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-web ./frontend/main.go

@@ -1,0 +1,57 @@
+name: samwallet
+version: 1.1.0
+summary: Cryptocurrency wallet generator with CLI and Web GUI
+description: |
+  A tool for generating and managing Bitcoin and Ethereum wallets.
+  Supports both command-line and web-based interfaces.
+  Implements BIP39 and BIP44 standards for mnemonic seed generation.
+  Wallet data is stored locally in an encrypted JSON file,
+  with the encryption key securely saved in the GNOME Keyring.
+
+  Features:
+  - Wallet Management: Create, list, get, and delete wallets
+  - Address Generation: Generate Bitcoin and Ethereum addresses from wallets
+  - Secure Storage: Encrypted mnemonic storage using GNOME keyring
+  - BIP39 Compliance: Standard mnemonic phrase generation
+  - Dual Interface: Both CLI and Web-based GUI for different user preferences
+  - Interactive CLI: User-friendly command-line interface for power users
+  - Modern Web GUI: Beautiful web interface for desktop users
+architectures:
+- amd64
+base: core22
+apps:
+  cli:
+    command: bin/wallet-generator-cli
+    plugs:
+    - gnome-keyring
+    - desktop
+    - desktop-legacy
+    - home
+    - network
+    environment:
+      HOME: $SNAP_USER_DATA
+  web:
+    command: bin/wallet-generator-web
+    plugs:
+    - gnome-keyring
+    - desktop
+    - desktop-legacy
+    - wayland
+    - x11
+    - unity7
+    - browser-support
+    - network
+    - network-bind
+    - home
+    environment:
+      HOME: $SNAP_USER_DATA
+confinement: strict
+grade: stable
+environment:
+  LD_LIBRARY_PATH: ${SNAP_LIBRARY_PATH}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}:$SNAP/usr/lib:$SNAP/usr/lib/x86_64-linux-gnu
+  PATH: $SNAP/usr/sbin:$SNAP/usr/bin:$SNAP/sbin:$SNAP/bin:$PATH
+plugs:
+  gnome-keyring:
+    interface: dbus
+    bus: session
+    name: org.freedesktop.secrets

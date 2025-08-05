@@ -1,0 +1,82 @@
+assets:
+  source-details: null
+  stage-packages:
+  - dbus-bin=1.14.10-4ubuntu4.1
+  - dbus-daemon=1.14.10-4ubuntu4.1
+  - dbus-session-bus-common=1.14.10-4ubuntu4.1
+  - dbus-user-session=1.14.10-4ubuntu4.1
+  - libdbus-1-3=1.14.10-4ubuntu4.1
+  - libglib2.0-0t64=2.80.0-6ubuntu3.4
+  - libsecret-1-0=0.21.4-1build3
+  - libsecret-common=0.21.4-1build3
+  stage-snaps: null
+directories: !!set {}
+files: !!set {}
+outdated_dirs:
+- .git
+- frontend
+outdated_files:
+- snapcraft.yaml
+- wallets.json
+part_properties:
+  after: []
+  build-attributes: []
+  build-environment: []
+  build-packages:
+  - gcc
+  - pkg-config
+  - libdbus-1-dev
+  - libsecret-1-dev
+  build-snaps:
+  - go/1.21/stable
+  disable-parallel: false
+  go-buildtags: []
+  go-generate: []
+  organize:
+    static: static
+  overlay:
+  - '*'
+  overlay-packages: []
+  overlay-script: null
+  override-build: "# Build CLI version\ngo build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-cli\
+    \ ./cmd/main.go\n\n# Build Web GUI version  \ngo build -o $SNAPCRAFT_PART_INSTALL/bin/wallet-generator-web\
+    \ ./frontend/main.go\n\n# Copy static files for web GUI\nmkdir -p $SNAPCRAFT_PART_INSTALL/static\n\
+    cp -r frontend/static/* $SNAPCRAFT_PART_INSTALL/static/\n"
+  override-prime: null
+  override-pull: null
+  override-stage: null
+  permissions: []
+  plugin: go
+  prime:
+  - '*'
+  source: .
+  source-branch: ''
+  source-channel: null
+  source-checksum: ''
+  source-commit: ''
+  source-depth: 0
+  source-subdir: ''
+  source-submodules: null
+  source-tag: ''
+  source-type: ''
+  stage:
+  - '*'
+  stage-packages:
+  - libdbus-1-3
+  - libsecret-1-0
+  - dbus-user-session
+  stage-snaps: []
+partition: null
+partitions_contents: {}
+project_options:
+  application_name: snapcraft
+  arch_triplet: x86_64-linux-gnu
+  project_vars:
+    grade:
+      updated: false
+      value: stable
+    version:
+      updated: false
+      value: 1.0.0
+  project_vars_part_name: null
+  target_arch: amd64
