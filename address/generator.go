@@ -1,9 +1,8 @@
 package address
 
 import (
-	"cli_wallet_generator/crypto"
-	"cli_wallet_generator/wallet"
 	"fmt"
+	"go_wallet_generator/wallet"
 	"time"
 )
 
@@ -41,13 +40,7 @@ func loadWalletWithMnemonic(walletName string) (*wallet.Wallet, error) {
 	if err != nil {
 		return nil, err
 	}
-	
-	mnemonic, err := crypto.DecryptBase64(instance.Mnemonic)
-	if err != nil {
-		return nil, err
-	}
 
-	instance.RawMnemonic = mnemonic
 	return instance, nil
 }
 
@@ -103,7 +96,7 @@ func RetrieveAddressList(walletName string) ([]wallet.Address, error) {
 	}
 
 	if walletInstance.Addresses == nil {
-		return nil, fmt.Errorf("wallet: %s`s addresses are empty", walletName)
+		return nil, fmt.Errorf("wallet: %s's addresses are empty", walletName)
 	}
 
 	return walletInstance.Addresses, nil

@@ -1,8 +1,9 @@
 package address
 
 import (
-	"cli_wallet_generator/wallet"
 	"crypto/sha256"
+	"go_wallet_generator/wallet"
+
 	"github.com/btcsuite/btcutil/base58"
 	"github.com/tyler-smith/go-bip32"
 	"github.com/tyler-smith/go-bip39"

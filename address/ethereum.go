@@ -1,9 +1,10 @@
 package address
 
 import (
-	"cli_wallet_generator/wallet"
 	"crypto/ecdsa"
 	"fmt"
+	"go_wallet_generator/wallet"
+
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/tyler-smith/go-bip32"
 	"github.com/tyler-smith/go-bip39"

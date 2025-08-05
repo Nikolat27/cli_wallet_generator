@@ -2,17 +2,17 @@ package main
 
 import (
 	"bufio"
-	"cli_wallet_generator/cli"
 	"fmt"
-	"github.com/joho/godotenv"
+	"go_wallet_generator/cli"
 	"os"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		panic(err)
-	}
+	// Load .env file if it exists (optional)
+	godotenv.Load()
 
 	fmt.Println("Enter your commands: ")
 

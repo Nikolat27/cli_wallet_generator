@@ -1,9 +1,9 @@
 package wallet
 
 import (
-	"cli_wallet_generator/bip39"
-	"cli_wallet_generator/crypto"
 	"fmt"
+	"go_wallet_generator/bip39"
+	"go_wallet_generator/crypto"
 	"slices"
 	"time"
 )
@@ -42,6 +42,10 @@ func (w *Wallet) CreateWallet() error {
 		return fmt.Errorf("failed to generate seed: %w", err)
 	}
 
+	// Store the raw mnemonic temporarily for one-time display
+	w.RawMnemonic = seed.Mnemonic
+
+	// Use keyring-based encryption
 	encryptedMnemonic, err := crypto.EncryptBase64(seed.Mnemonic)
 	if err != nil {
 		return fmt.Errorf("failed to encrypt mnemonic: %w", err)
@@ -67,6 +71,15 @@ func (w *Wallet) GetWalletInstance() (*Wallet, error) {
 	wallet, err := findWalletByName(w.Name)
 	if err != nil {
 		return nil, err
+	}
+
+	// Decrypt the mnemonic using keyring
+	if wallet.Mnemonic != "" {
+		decryptedMnemonic, err := crypto.DecryptBase64(wallet.Mnemonic)
+		if err != nil {
+			return nil, fmt.Errorf("failed to decrypt mnemonic: %w", err)
+		}
+		wallet.RawMnemonic = decryptedMnemonic
 	}
 
 	return wallet, nil

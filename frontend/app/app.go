@@ -1,12 +1,13 @@
 package app
 
 import (
-	"cli_wallet_generator/address"
-	"cli_wallet_generator/crypto"
-	"cli_wallet_generator/wallet"
 	"encoding/json"
 	"fmt"
+	"go_wallet_generator/address"
+	"go_wallet_generator/crypto"
+	"go_wallet_generator/wallet"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -51,8 +52,21 @@ func (wa *WalletApp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (wa *WalletApp) serveMainPage(w http.ResponseWriter, r *http.Request) {
-	// Serve the static HTML file
-	http.ServeFile(w, r, "gui/static/index.html")
+	// Serve the static HTML file - try multiple paths for different environments
+	paths := []string{
+		"static/index.html",          // Snap environment
+		"frontend/static/index.html", // Development environment
+	}
+
+	for _, path := range paths {
+		if _, err := os.Stat(path); err == nil {
+			http.ServeFile(w, r, path)
+			return
+		}
+	}
+
+	// If no file found, return 404
+	http.NotFound(w, r)
 }
 
 func (wa *WalletApp) handleWalletsAPI(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,8 @@
 package address
 
 import (
-	"cli_wallet_generator/address"
-	"cli_wallet_generator/wallet"
+	"go_wallet_generator/address"
+	"go_wallet_generator/wallet"
 	"errors"
 	"fmt"
 )

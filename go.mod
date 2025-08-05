@@ -1,4 +1,4 @@
-module cli_wallet_generator
+module go_wallet_generator
 
 go 1.24
 
@@ -10,7 +10,7 @@ require (
 	github.com/tyler-smith/go-bip32 v1.0.0
 	github.com/tyler-smith/go-bip39 v1.1.0
 	github.com/zalando/go-keyring v0.2.6
-	golang.org/x/crypto v0.36.0
+	golang.org/x/crypto v0.40.0
 )
 
 require (
@@ -21,5 +21,6 @@ require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/holiman/uint256 v1.3.2 // indirect
-	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/term v0.33.0 // indirect
 )

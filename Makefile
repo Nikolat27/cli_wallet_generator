@@ -1,5 +1,5 @@
 run:
 	go run cmd/main.go
 
-gui-run:
-	go run gui/main.go
+frontend-run:
+	go run frontend/main.go
