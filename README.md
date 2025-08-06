@@ -200,7 +200,7 @@ go_wallet_generator/
 
 - **GNOME Ubuntu Required**: This application requires GNOME Ubuntu for keyring functionality
 - **Mnemonic Safety**: The 12-word mnemonic phrase is automatically copied to your clipboard when creating a wallet. Keep it safe and secure
-- **Local Storage**: Wallet data is stored in `wallets.json` in the project directory
+- **Local Storage**: Wallet data is stored in `wallets.json` in the project directory (your mnemonic is encrypted dont worry)
 - **Unique Names**: Wallet names must be unique within the system
 - **Web Server**: The GUI runs on `http://localhost:3456` by default
 - **Backup**: Always backup your mnemonic phrases securely - they cannot be recovered if lost
